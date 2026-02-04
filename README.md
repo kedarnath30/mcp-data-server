@@ -278,4 +278,17 @@ Former Junior Data Analyst @ Cognizant
 
 ---
 
+## 📸 Screenshots
+
+### Power BI Dashboard
+![Business Performance Dashboard](screenshots/dashboard.png)
+
+### MCP Inspector Interface  
+![MCP Tools](screenshots/mcp-inspector.png)
+
+### Automated Refresh Pipeline
+![Terminal Output](screenshots/terminal-output.png)
+
+---
+
 **⭐ If you found this project helpful, please give it a star!**
