@@ -5,6 +5,7 @@ from mcp.types import Tool, TextContent
 import mcp.server.stdio
 from database import DatabaseManager
 from powerbi_export import PowerBIExporter
+from nl_to_sql import NaturalLanguageQueryEngine
 import pandas as pd
 
 # Initialize the MCP server
@@ -12,12 +13,22 @@ app = Server("business-data-server")
 db = DatabaseManager()
 pbi_exporter = PowerBIExporter()
 
+# Initialize natural language query engine
+try:
+    nl_engine = NaturalLanguageQueryEngine()
+    nl_enabled = True
+    print("✅ Natural language queries enabled")
+except ValueError as e:
+    nl_engine = None
+    nl_enabled = False
+    print(f"⚠️  Natural language queries disabled: {e}")
+
 @app.list_tools()
 async def list_tools() -> list[Tool]:
     """
     Define the tools (functions) that Claude can call
     """
-    return [
+    tools_list = [
         Tool(
             name="query_database",
             description=(
@@ -144,6 +155,37 @@ async def list_tools() -> list[Tool]:
             }
         )
     ]
+    
+    # Add natural language tool if enabled
+    if nl_enabled:
+        tools_list.append(
+            Tool(
+                name="ask_question",
+                description=(
+                    "🤖 Ask questions about your data in NATURAL LANGUAGE! "
+                    "Claude will automatically convert your question to SQL and execute it. "
+                    "Examples: 'What's our total revenue?', 'Show top 5 customers', "
+                    "'Which sales rep performs best?', 'What's our revenue by region?'"
+                ),
+                inputSchema={
+                    "type": "object",
+                    "properties": {
+                        "question": {
+                            "type": "string",
+                            "description": "Natural language question about the data"
+                        },
+                        "max_rows": {
+                            "type": "integer",
+                            "description": "Maximum rows to return (default: 50)",
+                            "default": 50
+                        }
+                    },
+                    "required": ["question"]
+                }
+            )
+        )
+    
+    return tools_list
 
 @app.call_tool()
 async def call_tool(name: str, arguments: dict) -> list[TextContent]:
@@ -243,6 +285,26 @@ async def call_tool(name: str, arguments: dict) -> list[TextContent]:
     
     elif name == "create_powerbi_dataset":
         result = pbi_exporter.create_powerbi_dataset()
+        
+        return [TextContent(
+            type="text",
+            text=json.dumps(result, indent=2, default=str)
+        )]
+    
+    elif name == "ask_question":
+        if not nl_enabled:
+            return [TextContent(
+                type="text",
+                text=json.dumps({
+                    "success": False,
+                    "error": "Natural language queries are disabled. Please set ANTHROPIC_API_KEY in .env"
+                })
+            )]
+        
+        question = arguments.get("question")
+        max_rows = arguments.get("max_rows", 50)
+        
+        result = nl_engine.query(question, max_rows)
         
         return [TextContent(
             type="text",
