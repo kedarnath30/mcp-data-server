@@ -1,0 +1,501 @@
+customer_id,state,plan_type,signup_date,monthly_charge,status,data_usage_gb,satisfaction_score
+VZ000001,Texas,Unlimited,2023-12-10,45,Active,26.76,3
+VZ000002,New York,Unlimited,2024-10-18,40,Active,32.47,4
+VZ000003,North Carolina,Unlimited,2023-09-13,40,Active,38.15,1
+VZ000004,Ohio,Unlimited,2023-02-28,45,Active,16.11,4
+VZ000005,North Carolina,Limited 5GB,2024-11-28,55,Active,11.05,5
+VZ000006,Illinois,Prepaid,2023-04-26,55,Active,40.36,2
+VZ000007,California,Unlimited,2023-01-02,70,Active,19.49,4
+VZ000008,Florida,Unlimited,2023-08-07,70,Active,25.36,3
+VZ000009,Pennsylvania,Prepaid,2023-03-15,45,Active,46.87,5
+VZ000010,Georgia,Limited 10GB,2023-09-19,70,Active,15.48,2
+VZ000011,California,Unlimited,2023-07-18,55,Active,20.21,3
+VZ000012,Ohio,Unlimited,2023-08-18,70,Active,47.5,3
+VZ000013,Illinois,Unlimited,2023-03-08,45,Active,20.39,4
+VZ000014,Georgia,Limited 5GB,2024-12-22,45,Active,27.94,4
+VZ000015,Georgia,Unlimited,2024-07-29,40,Churned,37.18,5
+VZ000016,New York,Limited 10GB,2023-09-14,45,Active,42.78,2
+VZ000017,Ohio,Limited 5GB,2024-04-24,70,Churned,33.59,4
+VZ000018,Georgia,Unlimited,2023-02-27,40,Active,45.77,3
+VZ000019,Illinois,Limited 10GB,2024-05-19,45,Churned,22.28,5
+VZ000020,New York,Unlimited,2024-05-05,40,Churned,44.6,1
+VZ000021,Georgia,Unlimited,2023-10-25,70,Active,2.55,4
+VZ000022,New York,Limited 5GB,2024-05-04,70,Active,46.54,3
+VZ000023,Georgia,Prepaid,2024-06-22,40,Active,36.96,3
+VZ000024,Texas,Limited 10GB,2023-10-24,40,Active,17.83,4
+VZ000025,Pennsylvania,Unlimited,2024-06-23,55,Churned,11.23,3
+VZ000026,California,Unlimited,2024-01-10,40,Active,33.01,3
+VZ000027,Pennsylvania,Unlimited,2024-05-18,55,Active,21.24,2
+VZ000028,Illinois,Limited 10GB,2024-03-13,45,Active,39.14,2
+VZ000029,Georgia,Limited 10GB,2023-05-19,55,Active,34.19,4
+VZ000030,Florida,Unlimited,2024-04-05,55,Churned,12.95,2
+VZ000031,Florida,Limited 5GB,2024-10-16,55,Churned,8.76,2
+VZ000032,Michigan,Limited 10GB,2024-01-21,55,Active,48.51,1
+VZ000033,Illinois,Limited 10GB,2024-12-08,55,Active,26.23,2
+VZ000034,New York,Limited 10GB,2024-02-28,70,Active,18.01,1
+VZ000035,Texas,Limited 10GB,2024-11-29,55,Active,31.2,2
+VZ000036,California,Limited 10GB,2024-09-29,55,Active,40.74,5
+VZ000037,Michigan,Unlimited,2023-08-21,70,Churned,41.69,4
+VZ000038,Illinois,Limited 10GB,2024-01-29,40,Active,10.84,2
+VZ000039,New York,Limited 10GB,2023-07-28,70,Active,31.76,1
+VZ000040,Michigan,Unlimited,2024-12-25,70,Active,22.33,5
+VZ000041,North Carolina,Prepaid,2024-03-27,55,Active,40.46,4
+VZ000042,North Carolina,Unlimited,2024-04-28,40,Active,29.59,2
+VZ000043,Ohio,Limited 10GB,2023-11-03,40,Active,15.14,1
+VZ000044,California,Unlimited,2023-10-04,55,Active,38.58,3
+VZ000045,Ohio,Limited 10GB,2023-08-11,45,Active,3.66,1
+VZ000046,California,Limited 5GB,2024-01-04,40,Active,18.61,4
+VZ000047,Illinois,Unlimited,2023-09-14,40,Active,17.49,4
+VZ000048,Illinois,Unlimited,2023-03-10,70,Active,41.01,4
+VZ000049,California,Limited 10GB,2024-04-01,55,Active,12.53,1
+VZ000050,North Carolina,Limited 10GB,2023-01-19,70,Active,38.03,4
+VZ000051,Georgia,Limited 10GB,2024-10-02,55,Active,26.0,5
+VZ000052,Georgia,Prepaid,2024-02-24,45,Active,46.68,5
+VZ000053,New York,Limited 5GB,2024-07-22,55,Active,32.11,3
+VZ000054,North Carolina,Limited 5GB,2024-05-20,70,Active,6.62,1
+VZ000055,Texas,Limited 5GB,2023-04-22,45,Active,44.66,4
+VZ000056,Texas,Limited 10GB,2024-12-12,70,Active,20.89,1
+VZ000057,California,Unlimited,2023-05-21,45,Active,15.43,4
+VZ000058,Michigan,Unlimited,2023-10-17,40,Active,5.87,4
+VZ000059,Ohio,Unlimited,2023-07-08,55,Active,44.53,5
+VZ000060,Pennsylvania,Unlimited,2023-06-20,45,Active,33.99,1
+VZ000061,New York,Limited 10GB,2024-02-08,70,Active,16.31,2
+VZ000062,Florida,Limited 10GB,2024-09-11,55,Active,4.73,2
+VZ000063,Florida,Unlimited,2023-09-28,40,Churned,19.01,3
+VZ000064,Ohio,Unlimited,2023-09-10,45,Active,41.26,1
+VZ000065,Georgia,Unlimited,2023-05-30,55,Active,45.36,1
+VZ000066,Texas,Limited 5GB,2024-11-17,70,Active,24.94,5
+VZ000067,California,Prepaid,2024-12-18,40,Active,35.51,5
+VZ000068,Ohio,Unlimited,2023-10-12,40,Active,48.7,3
+VZ000069,California,Prepaid,2023-12-15,45,Churned,24.41,3
+VZ000070,Illinois,Limited 5GB,2023-05-18,40,Active,26.53,3
+VZ000071,New York,Limited 10GB,2024-11-23,40,Active,31.57,5
+VZ000072,Ohio,Unlimited,2024-01-30,45,Active,45.35,1
+VZ000073,New York,Limited 10GB,2024-05-31,45,Active,2.99,2
+VZ000074,Michigan,Unlimited,2023-05-05,45,Active,14.28,2
+VZ000075,North Carolina,Limited 10GB,2024-04-03,40,Active,36.45,1
+VZ000076,Texas,Limited 5GB,2023-10-01,45,Active,10.53,4
+VZ000077,Texas,Prepaid,2024-08-02,40,Active,31.58,4
+VZ000078,California,Limited 5GB,2024-05-03,55,Active,4.02,3
+VZ000079,Michigan,Limited 5GB,2023-03-05,70,Active,21.19,1
+VZ000080,Ohio,Unlimited,2024-03-29,70,Churned,41.62,4
+VZ000081,Texas,Unlimited,2023-11-18,45,Active,26.78,4
+VZ000082,Michigan,Unlimited,2023-10-04,40,Active,34.8,2
+VZ000083,New York,Unlimited,2024-07-19,55,Active,26.66,2
+VZ000084,Florida,Limited 10GB,2023-04-21,70,Active,4.2,3
+VZ000085,California,Limited 10GB,2024-04-21,55,Active,43.57,1
+VZ000086,Illinois,Unlimited,2024-01-01,55,Active,14.49,3
+VZ000087,Ohio,Prepaid,2024-08-02,55,Active,38.36,3
+VZ000088,Illinois,Unlimited,2024-10-16,70,Active,45.28,3
+VZ000089,California,Prepaid,2024-12-16,70,Churned,31.18,3
+VZ000090,Georgia,Limited 5GB,2023-10-30,70,Active,34.51,4
+VZ000091,California,Unlimited,2023-03-06,40,Active,40.21,5
+VZ000092,Illinois,Limited 10GB,2023-10-29,45,Active,5.49,2
+VZ000093,Michigan,Limited 10GB,2023-09-10,40,Active,44.11,1
+VZ000094,Texas,Unlimited,2024-04-22,70,Active,42.44,5
+VZ000095,Texas,Limited 10GB,2024-03-31,55,Churned,5.92,2
+VZ000096,Michigan,Unlimited,2023-08-29,70,Active,27.59,4
+VZ000097,North Carolina,Unlimited,2023-02-13,40,Active,49.18,4
+VZ000098,Illinois,Unlimited,2023-06-03,70,Churned,49.27,3
+VZ000099,Illinois,Unlimited,2024-02-22,45,Active,5.85,1
+VZ000100,California,Limited 10GB,2023-10-17,55,Churned,48.13,2
+VZ000101,Florida,Limited 10GB,2023-12-10,45,Active,45.19,5
+VZ000102,Ohio,Unlimited,2024-12-08,70,Active,2.5,1
+VZ000103,Ohio,Limited 5GB,2023-08-29,40,Active,21.4,1
+VZ000104,North Carolina,Unlimited,2023-07-27,55,Active,47.33,1
+VZ000105,North Carolina,Limited 10GB,2023-12-13,40,Active,13.83,3
+VZ000106,Pennsylvania,Unlimited,2024-07-10,40,Active,9.13,1
+VZ000107,Ohio,Unlimited,2023-05-02,40,Active,4.56,3
+VZ000108,Georgia,Prepaid,2024-04-15,70,Active,20.67,3
+VZ000109,Michigan,Prepaid,2024-02-21,40,Active,28.55,2
+VZ000110,Illinois,Unlimited,2023-01-05,70,Active,36.79,4
+VZ000111,Pennsylvania,Unlimited,2023-09-12,70,Churned,47.71,3
+VZ000112,New York,Limited 5GB,2024-10-29,55,Active,43.49,4
+VZ000113,Illinois,Limited 10GB,2023-05-15,40,Active,23.04,3
+VZ000114,Michigan,Limited 5GB,2023-08-12,40,Active,19.82,5
+VZ000115,Michigan,Limited 10GB,2023-10-23,55,Churned,7.23,3
+VZ000116,Ohio,Unlimited,2024-07-07,45,Active,27.71,1
+VZ000117,Ohio,Limited 10GB,2024-10-15,70,Active,15.17,5
+VZ000118,Georgia,Limited 5GB,2023-04-02,40,Churned,7.47,2
+VZ000119,Ohio,Limited 10GB,2023-11-02,70,Active,46.8,1
+VZ000120,Georgia,Prepaid,2024-03-16,70,Churned,5.1,4
+VZ000121,Illinois,Unlimited,2023-03-11,45,Active,20.32,3
+VZ000122,Pennsylvania,Limited 5GB,2023-09-17,55,Active,4.98,4
+VZ000123,Illinois,Limited 10GB,2023-10-08,70,Active,37.13,1
+VZ000124,Ohio,Prepaid,2024-03-11,70,Active,41.61,3
+VZ000125,Florida,Unlimited,2024-09-28,45,Active,37.11,3
+VZ000126,Ohio,Limited 5GB,2024-11-11,40,Active,37.54,1
+VZ000127,New York,Limited 5GB,2023-12-09,45,Active,30.04,5
+VZ000128,Illinois,Limited 10GB,2023-08-19,45,Churned,38.98,1
+VZ000129,Pennsylvania,Prepaid,2023-10-20,45,Active,7.18,2
+VZ000130,Texas,Unlimited,2023-07-12,70,Active,30.33,3
+VZ000131,Illinois,Limited 10GB,2023-04-27,70,Active,23.13,4
+VZ000132,Texas,Limited 10GB,2024-03-11,40,Churned,40.05,3
+VZ000133,Florida,Unlimited,2023-10-30,45,Active,23.91,2
+VZ000134,North Carolina,Prepaid,2024-01-24,55,Churned,5.47,3
+VZ000135,Florida,Limited 10GB,2023-08-25,40,Active,30.75,3
+VZ000136,North Carolina,Limited 10GB,2023-06-28,45,Active,22.2,4
+VZ000137,New York,Limited 5GB,2024-10-08,45,Active,42.66,2
+VZ000138,California,Prepaid,2024-11-03,45,Active,49.39,5
+VZ000139,Ohio,Prepaid,2023-03-13,70,Active,35.56,3
+VZ000140,California,Limited 10GB,2024-12-29,45,Active,10.44,3
+VZ000141,Ohio,Limited 10GB,2024-10-09,45,Active,11.4,2
+VZ000142,Texas,Unlimited,2023-06-04,45,Active,39.17,4
+VZ000143,California,Limited 5GB,2023-10-16,70,Active,20.72,5
+VZ000144,Florida,Limited 5GB,2023-08-25,45,Active,13.8,4
+VZ000145,New York,Limited 10GB,2023-02-07,40,Active,15.23,4
+VZ000146,Georgia,Unlimited,2023-01-21,40,Active,17.97,2
+VZ000147,Texas,Unlimited,2024-09-13,70,Active,27.68,3
+VZ000148,Pennsylvania,Unlimited,2024-08-26,45,Active,36.29,4
+VZ000149,Illinois,Limited 10GB,2023-05-06,70,Active,18.95,2
+VZ000150,Pennsylvania,Prepaid,2023-08-06,70,Active,15.8,3
+VZ000151,Pennsylvania,Unlimited,2023-06-06,40,Active,45.19,3
+VZ000152,Texas,Limited 5GB,2023-07-18,45,Churned,3.19,1
+VZ000153,Texas,Limited 5GB,2023-10-24,55,Active,16.54,5
+VZ000154,New York,Unlimited,2023-03-24,40,Active,44.74,1
+VZ000155,Texas,Prepaid,2023-07-03,70,Active,22.07,4
+VZ000156,Florida,Prepaid,2024-12-17,45,Active,47.69,4
+VZ000157,Texas,Unlimited,2024-12-22,45,Active,45.96,2
+VZ000158,Illinois,Limited 5GB,2023-09-04,40,Active,30.65,4
+VZ000159,New York,Limited 10GB,2023-12-22,55,Churned,7.15,5
+VZ000160,California,Limited 5GB,2023-06-10,40,Churned,26.93,4
+VZ000161,Ohio,Unlimited,2023-03-05,40,Active,15.46,4
+VZ000162,California,Limited 10GB,2024-05-11,70,Active,13.54,3
+VZ000163,California,Unlimited,2023-07-10,45,Active,31.92,2
+VZ000164,California,Limited 10GB,2023-05-28,55,Active,8.18,4
+VZ000165,Ohio,Limited 10GB,2023-08-26,40,Active,42.5,3
+VZ000166,California,Limited 10GB,2024-09-04,55,Active,34.62,4
+VZ000167,Illinois,Limited 10GB,2023-05-31,55,Active,40.82,5
+VZ000168,Ohio,Limited 10GB,2023-07-13,45,Active,36.12,4
+VZ000169,New York,Limited 10GB,2023-02-04,55,Active,17.52,2
+VZ000170,Florida,Unlimited,2023-10-05,45,Active,29.07,1
+VZ000171,Ohio,Limited 10GB,2024-04-06,45,Active,35.16,1
+VZ000172,Florida,Limited 5GB,2024-10-17,45,Active,23.36,3
+VZ000173,Pennsylvania,Unlimited,2024-01-14,40,Active,11.16,5
+VZ000174,Florida,Unlimited,2023-03-19,70,Active,3.87,2
+VZ000175,North Carolina,Limited 5GB,2024-02-20,70,Active,41.79,3
+VZ000176,California,Prepaid,2023-05-27,45,Active,43.27,2
+VZ000177,North Carolina,Limited 10GB,2024-05-31,45,Churned,31.03,5
+VZ000178,Florida,Unlimited,2024-04-03,40,Active,41.55,4
+VZ000179,California,Unlimited,2023-11-10,70,Active,33.6,1
+VZ000180,Pennsylvania,Unlimited,2023-01-29,70,Active,22.43,5
+VZ000181,Georgia,Unlimited,2024-07-09,45,Active,20.54,3
+VZ000182,Florida,Unlimited,2024-01-19,40,Active,49.22,1
+VZ000183,Pennsylvania,Unlimited,2023-10-12,70,Active,36.52,2
+VZ000184,Illinois,Unlimited,2023-04-27,45,Churned,37.51,3
+VZ000185,California,Limited 10GB,2024-08-24,45,Active,27.33,4
+VZ000186,Florida,Limited 10GB,2024-07-19,40,Active,41.57,4
+VZ000187,North Carolina,Limited 10GB,2023-11-01,45,Active,45.62,4
+VZ000188,Ohio,Unlimited,2023-02-21,45,Active,47.83,3
+VZ000189,Florida,Prepaid,2023-12-06,55,Active,6.75,1
+VZ000190,Illinois,Limited 10GB,2023-10-26,45,Active,42.77,3
+VZ000191,Illinois,Limited 10GB,2024-09-23,55,Active,24.68,5
+VZ000192,New York,Limited 5GB,2024-08-03,45,Active,22.6,3
+VZ000193,Pennsylvania,Unlimited,2024-11-12,45,Active,29.63,3
+VZ000194,Georgia,Limited 5GB,2023-01-19,55,Active,4.78,3
+VZ000195,North Carolina,Limited 10GB,2024-09-24,40,Active,31.43,5
+VZ000196,New York,Unlimited,2024-07-14,45,Active,15.78,1
+VZ000197,New York,Limited 10GB,2024-10-17,45,Active,41.89,1
+VZ000198,Illinois,Prepaid,2023-04-17,70,Active,42.16,5
+VZ000199,Texas,Limited 10GB,2023-09-06,45,Active,40.93,1
+VZ000200,New York,Unlimited,2024-01-12,45,Active,47.86,3
+VZ000201,Illinois,Limited 5GB,2024-12-10,40,Active,38.22,1
+VZ000202,Florida,Unlimited,2023-03-24,45,Active,41.17,3
+VZ000203,Georgia,Prepaid,2024-08-13,55,Active,7.79,4
+VZ000204,Pennsylvania,Unlimited,2024-12-09,70,Churned,8.41,5
+VZ000205,New York,Limited 5GB,2024-08-02,70,Active,31.93,2
+VZ000206,California,Limited 5GB,2024-08-22,70,Active,26.37,5
+VZ000207,Michigan,Unlimited,2024-10-05,45,Active,38.99,4
+VZ000208,North Carolina,Limited 5GB,2024-08-24,55,Active,31.5,3
+VZ000209,North Carolina,Limited 5GB,2024-11-21,45,Active,12.39,1
+VZ000210,North Carolina,Unlimited,2023-01-01,45,Active,40.97,5
+VZ000211,North Carolina,Unlimited,2024-12-03,40,Churned,35.69,5
+VZ000212,New York,Unlimited,2024-10-03,40,Active,20.72,2
+VZ000213,Michigan,Limited 10GB,2023-03-12,55,Active,12.56,1
+VZ000214,Pennsylvania,Prepaid,2023-08-01,40,Active,31.23,2
+VZ000215,Texas,Limited 5GB,2023-10-19,55,Active,49.03,1
+VZ000216,New York,Limited 5GB,2024-09-22,70,Active,3.64,4
+VZ000217,Florida,Unlimited,2023-03-22,45,Active,38.45,3
+VZ000218,Michigan,Unlimited,2023-08-28,70,Churned,37.84,4
+VZ000219,Illinois,Unlimited,2023-11-29,45,Active,32.06,5
+VZ000220,Florida,Unlimited,2023-12-18,70,Active,30.84,2
+VZ000221,Texas,Prepaid,2024-04-23,55,Churned,3.99,2
+VZ000222,Georgia,Unlimited,2023-02-16,70,Churned,27.13,3
+VZ000223,California,Limited 10GB,2024-02-19,55,Active,21.35,2
+VZ000224,Florida,Unlimited,2024-03-18,55,Churned,34.6,3
+VZ000225,New York,Unlimited,2023-05-29,70,Active,39.54,5
+VZ000226,Georgia,Unlimited,2024-06-16,40,Active,27.48,3
+VZ000227,Ohio,Unlimited,2023-08-05,40,Churned,4.07,3
+VZ000228,Illinois,Unlimited,2023-03-01,55,Active,44.1,2
+VZ000229,Ohio,Unlimited,2023-11-11,45,Churned,33.43,3
+VZ000230,Michigan,Limited 5GB,2023-12-31,70,Active,37.26,4
+VZ000231,Florida,Unlimited,2024-04-17,70,Churned,44.49,2
+VZ000232,Ohio,Prepaid,2024-11-21,70,Active,15.76,1
+VZ000233,New York,Prepaid,2023-12-03,45,Active,27.74,3
+VZ000234,Michigan,Unlimited,2024-10-15,55,Churned,40.46,5
+VZ000235,Texas,Limited 5GB,2023-08-30,45,Active,32.41,5
+VZ000236,Michigan,Prepaid,2024-06-06,70,Active,18.54,4
+VZ000237,Florida,Unlimited,2024-03-23,40,Active,11.1,2
+VZ000238,Georgia,Prepaid,2023-09-20,45,Churned,17.61,2
+VZ000239,North Carolina,Unlimited,2024-08-22,40,Active,16.52,1
+VZ000240,California,Unlimited,2023-12-12,55,Churned,25.88,5
+VZ000241,Pennsylvania,Prepaid,2023-07-21,40,Active,44.85,4
+VZ000242,Pennsylvania,Limited 5GB,2023-07-11,40,Active,29.07,3
+VZ000243,North Carolina,Limited 5GB,2024-06-09,45,Active,14.43,1
+VZ000244,Ohio,Limited 5GB,2024-04-14,45,Active,33.71,5
+VZ000245,North Carolina,Unlimited,2024-10-07,45,Churned,10.57,1
+VZ000246,Texas,Limited 5GB,2024-12-06,40,Active,20.17,1
+VZ000247,California,Unlimited,2023-08-07,55,Active,6.28,2
+VZ000248,California,Limited 10GB,2023-05-30,40,Active,30.7,5
+VZ000249,Texas,Unlimited,2024-04-16,55,Active,7.14,5
+VZ000250,California,Unlimited,2024-12-08,40,Active,42.82,1
+VZ000251,California,Unlimited,2024-11-07,40,Active,44.0,1
+VZ000252,New York,Limited 10GB,2024-06-30,40,Active,34.95,5
+VZ000253,Texas,Prepaid,2024-09-06,40,Active,45.31,5
+VZ000254,New York,Limited 10GB,2024-09-03,70,Churned,47.38,3
+VZ000255,California,Unlimited,2024-05-13,55,Churned,41.25,5
+VZ000256,Texas,Prepaid,2023-07-07,70,Active,26.45,2
+VZ000257,Michigan,Prepaid,2024-06-16,45,Active,44.9,1
+VZ000258,Georgia,Limited 5GB,2024-04-21,40,Active,19.49,2
+VZ000259,Michigan,Unlimited,2023-02-03,55,Active,9.04,1
+VZ000260,North Carolina,Limited 10GB,2023-09-15,55,Active,12.82,1
+VZ000261,Illinois,Limited 5GB,2023-04-16,45,Active,13.61,4
+VZ000262,Illinois,Unlimited,2024-04-26,55,Active,30.44,4
+VZ000263,Ohio,Unlimited,2023-03-04,55,Active,37.82,3
+VZ000264,Georgia,Limited 10GB,2023-09-20,40,Active,41.89,1
+VZ000265,Ohio,Limited 5GB,2024-03-12,40,Active,38.68,1
+VZ000266,Illinois,Limited 5GB,2023-06-10,55,Active,6.94,4
+VZ000267,North Carolina,Unlimited,2024-10-24,40,Active,38.14,4
+VZ000268,Ohio,Unlimited,2024-06-23,45,Active,36.13,2
+VZ000269,Ohio,Prepaid,2023-08-23,70,Churned,12.19,5
+VZ000270,New York,Limited 10GB,2024-11-14,40,Active,39.24,4
+VZ000271,California,Limited 10GB,2023-04-01,40,Active,5.35,4
+VZ000272,Pennsylvania,Limited 10GB,2024-02-21,45,Active,26.88,3
+VZ000273,Michigan,Limited 10GB,2024-09-10,70,Churned,23.31,4
+VZ000274,Michigan,Limited 5GB,2023-12-02,45,Churned,17.86,2
+VZ000275,Ohio,Limited 10GB,2024-08-23,40,Active,30.77,3
+VZ000276,Michigan,Unlimited,2023-05-09,40,Active,42.88,3
+VZ000277,North Carolina,Prepaid,2024-12-02,40,Active,31.62,4
+VZ000278,North Carolina,Unlimited,2023-02-08,40,Churned,29.12,4
+VZ000279,Georgia,Unlimited,2024-10-05,40,Active,46.07,3
+VZ000280,Georgia,Unlimited,2023-01-09,55,Active,18.05,3
+VZ000281,Ohio,Limited 10GB,2023-03-23,55,Active,7.8,2
+VZ000282,Pennsylvania,Limited 10GB,2024-12-22,55,Active,6.64,2
+VZ000283,Florida,Limited 5GB,2023-09-17,55,Churned,13.38,2
+VZ000284,Illinois,Prepaid,2023-12-19,40,Active,5.01,2
+VZ000285,Georgia,Limited 5GB,2023-12-06,55,Active,34.79,1
+VZ000286,Florida,Prepaid,2023-01-12,70,Churned,5.07,3
+VZ000287,Florida,Limited 10GB,2023-01-30,40,Churned,15.97,3
+VZ000288,Georgia,Limited 5GB,2023-02-17,45,Active,43.68,4
+VZ000289,New York,Unlimited,2024-02-23,55,Churned,2.74,1
+VZ000290,Michigan,Limited 5GB,2024-08-20,55,Active,13.03,5
+VZ000291,New York,Prepaid,2024-01-01,55,Active,4.15,1
+VZ000292,Texas,Limited 10GB,2024-09-01,45,Active,43.79,5
+VZ000293,Georgia,Limited 10GB,2023-04-23,55,Active,32.27,4
+VZ000294,Florida,Unlimited,2024-06-13,40,Active,43.13,3
+VZ000295,Texas,Limited 5GB,2023-06-16,55,Active,49.49,2
+VZ000296,North Carolina,Limited 10GB,2024-07-09,55,Active,14.31,3
+VZ000297,Pennsylvania,Unlimited,2023-03-28,70,Active,26.33,4
+VZ000298,Florida,Prepaid,2024-10-16,55,Active,27.02,5
+VZ000299,Florida,Unlimited,2023-04-29,45,Active,4.48,2
+VZ000300,Illinois,Limited 5GB,2023-06-03,70,Churned,32.96,3
+VZ000301,Illinois,Prepaid,2023-01-05,45,Active,23.59,1
+VZ000302,Ohio,Unlimited,2024-02-13,40,Active,44.46,3
+VZ000303,Florida,Limited 5GB,2024-07-03,45,Active,11.29,2
+VZ000304,North Carolina,Unlimited,2023-03-07,70,Active,23.94,5
+VZ000305,New York,Limited 5GB,2024-12-29,70,Active,9.36,2
+VZ000306,California,Prepaid,2023-04-02,55,Active,38.32,1
+VZ000307,Georgia,Unlimited,2023-12-09,45,Churned,43.55,3
+VZ000308,California,Unlimited,2023-07-10,45,Active,13.14,5
+VZ000309,Michigan,Prepaid,2023-02-18,45,Active,12.72,1
+VZ000310,New York,Unlimited,2023-07-20,40,Active,32.52,1
+VZ000311,Michigan,Limited 5GB,2023-02-16,70,Churned,41.34,3
+VZ000312,Ohio,Limited 5GB,2023-11-20,70,Active,25.38,2
+VZ000313,California,Limited 5GB,2023-12-06,70,Active,29.1,2
+VZ000314,Texas,Limited 5GB,2023-08-27,70,Active,15.06,4
+VZ000315,Michigan,Unlimited,2023-12-28,45,Active,23.36,5
+VZ000316,Georgia,Unlimited,2024-10-25,55,Churned,11.96,5
+VZ000317,Georgia,Limited 5GB,2023-04-03,70,Active,18.79,5
+VZ000318,New York,Unlimited,2024-10-07,45,Active,37.54,1
+VZ000319,Texas,Unlimited,2023-02-02,40,Active,15.76,4
+VZ000320,Michigan,Prepaid,2024-08-30,40,Active,28.44,2
+VZ000321,Michigan,Limited 5GB,2023-01-19,40,Active,16.18,5
+VZ000322,Texas,Limited 5GB,2024-11-11,55,Active,31.25,1
+VZ000323,Texas,Unlimited,2024-09-16,40,Active,18.44,4
+VZ000324,Illinois,Unlimited,2024-06-22,70,Active,27.75,4
+VZ000325,Michigan,Limited 10GB,2024-05-03,70,Active,21.07,2
+VZ000326,Illinois,Limited 10GB,2024-08-02,40,Active,7.74,4
+VZ000327,Georgia,Unlimited,2023-12-12,45,Active,14.27,5
+VZ000328,Ohio,Limited 5GB,2024-11-09,55,Active,29.41,4
+VZ000329,Ohio,Unlimited,2024-01-02,40,Active,6.28,4
+VZ000330,New York,Prepaid,2024-05-04,70,Active,44.62,3
+VZ000331,North Carolina,Limited 5GB,2023-03-30,45,Active,13.8,4
+VZ000332,New York,Unlimited,2024-05-20,55,Active,41.54,1
+VZ000333,Florida,Limited 5GB,2023-05-24,70,Active,25.21,4
+VZ000334,Illinois,Limited 5GB,2024-04-26,45,Active,4.42,5
+VZ000335,Texas,Limited 5GB,2024-05-21,40,Active,37.66,5
+VZ000336,Illinois,Unlimited,2023-03-19,45,Active,45.83,3
+VZ000337,Georgia,Limited 10GB,2023-02-01,70,Active,31.55,1
+VZ000338,Florida,Prepaid,2024-04-12,40,Active,19.47,3
+VZ000339,Georgia,Unlimited,2024-09-25,70,Active,47.89,2
+VZ000340,Ohio,Unlimited,2024-04-10,45,Active,18.55,4
+VZ000341,California,Prepaid,2023-02-25,55,Active,27.16,2
+VZ000342,North Carolina,Unlimited,2024-12-11,40,Active,9.43,2
+VZ000343,Illinois,Unlimited,2023-07-18,45,Churned,9.13,4
+VZ000344,California,Prepaid,2023-04-27,70,Active,16.6,1
+VZ000345,Florida,Limited 5GB,2024-01-04,55,Active,27.23,2
+VZ000346,Michigan,Limited 10GB,2024-08-28,40,Active,41.52,2
+VZ000347,North Carolina,Unlimited,2023-07-14,70,Churned,19.15,4
+VZ000348,Ohio,Unlimited,2024-11-25,45,Active,12.43,3
+VZ000349,Florida,Prepaid,2023-11-03,45,Churned,28.52,2
+VZ000350,Texas,Limited 10GB,2023-05-25,70,Active,2.35,3
+VZ000351,Pennsylvania,Limited 5GB,2024-09-07,55,Active,10.22,3
+VZ000352,Pennsylvania,Unlimited,2023-06-22,45,Active,26.82,2
+VZ000353,North Carolina,Unlimited,2024-12-21,55,Active,42.09,1
+VZ000354,North Carolina,Unlimited,2023-10-28,45,Active,16.06,3
+VZ000355,Ohio,Limited 10GB,2023-12-09,40,Churned,31.86,1
+VZ000356,Illinois,Prepaid,2023-03-09,70,Active,32.42,3
+VZ000357,Illinois,Limited 5GB,2023-11-24,55,Active,6.94,3
+VZ000358,Texas,Prepaid,2024-11-11,40,Active,38.93,2
+VZ000359,Georgia,Unlimited,2024-06-20,40,Active,36.05,5
+VZ000360,North Carolina,Prepaid,2023-10-16,70,Active,29.73,1
+VZ000361,Florida,Unlimited,2023-04-16,70,Active,28.6,4
+VZ000362,Michigan,Limited 5GB,2023-11-04,45,Active,34.91,3
+VZ000363,Georgia,Prepaid,2023-10-19,55,Active,6.38,5
+VZ000364,Texas,Limited 5GB,2023-10-02,45,Active,10.2,4
+VZ000365,Ohio,Prepaid,2023-04-06,45,Active,43.67,2
+VZ000366,Florida,Prepaid,2024-11-16,70,Active,46.11,3
+VZ000367,Pennsylvania,Prepaid,2024-04-07,45,Active,23.52,3
+VZ000368,New York,Unlimited,2023-12-05,45,Active,36.78,5
+VZ000369,New York,Unlimited,2024-10-31,55,Active,9.56,1
+VZ000370,Michigan,Limited 10GB,2024-11-22,55,Active,15.41,3
+VZ000371,New York,Unlimited,2024-07-22,40,Active,24.01,5
+VZ000372,North Carolina,Limited 10GB,2023-07-31,70,Active,37.02,2
+VZ000373,Ohio,Prepaid,2023-10-14,45,Active,31.1,3
+VZ000374,Ohio,Unlimited,2024-03-05,70,Active,17.1,1
+VZ000375,Ohio,Limited 5GB,2024-11-20,70,Active,33.92,3
+VZ000376,Ohio,Limited 5GB,2023-03-04,40,Active,31.95,2
+VZ000377,Florida,Unlimited,2023-07-12,55,Active,8.42,2
+VZ000378,Michigan,Unlimited,2023-11-30,40,Active,19.69,2
+VZ000379,Illinois,Limited 5GB,2024-11-18,55,Active,27.23,4
+VZ000380,Ohio,Prepaid,2023-02-13,70,Active,37.88,4
+VZ000381,Ohio,Limited 5GB,2024-11-27,45,Churned,26.39,5
+VZ000382,Georgia,Unlimited,2024-03-20,40,Active,18.25,2
+VZ000383,North Carolina,Limited 5GB,2024-03-18,55,Active,18.23,1
+VZ000384,North Carolina,Limited 5GB,2023-05-20,70,Active,7.9,5
+VZ000385,New York,Limited 5GB,2024-02-08,70,Active,24.05,1
+VZ000386,Florida,Unlimited,2024-11-27,45,Active,20.31,4
+VZ000387,New York,Limited 5GB,2024-04-06,70,Active,2.72,3
+VZ000388,New York,Unlimited,2024-02-11,70,Active,19.8,4
+VZ000389,Texas,Unlimited,2023-12-30,70,Active,16.72,1
+VZ000390,Pennsylvania,Limited 10GB,2024-04-18,40,Active,5.83,1
+VZ000391,New York,Limited 10GB,2023-03-06,70,Active,36.16,3
+VZ000392,Pennsylvania,Unlimited,2024-09-02,45,Churned,31.75,2
+VZ000393,Texas,Unlimited,2023-11-14,45,Churned,39.85,1
+VZ000394,Pennsylvania,Limited 5GB,2024-10-19,55,Active,3.66,3
+VZ000395,North Carolina,Limited 10GB,2024-04-02,45,Active,21.88,2
+VZ000396,New York,Limited 10GB,2023-01-20,45,Active,30.87,3
+VZ000397,North Carolina,Limited 10GB,2023-08-06,45,Active,34.81,2
+VZ000398,Michigan,Limited 10GB,2024-12-17,45,Active,23.28,2
+VZ000399,Illinois,Limited 10GB,2023-02-08,45,Active,31.0,5
+VZ000400,New York,Prepaid,2023-04-01,70,Active,23.56,3
+VZ000401,Florida,Unlimited,2024-09-01,70,Active,47.46,4
+VZ000402,Ohio,Prepaid,2024-05-25,55,Active,10.54,5
+VZ000403,Pennsylvania,Prepaid,2024-03-06,70,Active,48.22,5
+VZ000404,Ohio,Limited 5GB,2023-03-28,70,Active,24.82,4
+VZ000405,Texas,Unlimited,2024-04-17,70,Active,40.06,3
+VZ000406,Ohio,Unlimited,2023-11-14,40,Churned,27.7,5
+VZ000407,Illinois,Unlimited,2024-04-02,55,Active,20.76,5
+VZ000408,Michigan,Prepaid,2024-08-14,45,Churned,18.15,2
+VZ000409,Texas,Limited 5GB,2023-12-01,70,Active,43.87,1
+VZ000410,California,Limited 5GB,2024-02-26,55,Active,6.29,2
+VZ000411,Georgia,Unlimited,2023-06-25,40,Active,26.23,3
+VZ000412,Georgia,Limited 5GB,2024-12-20,40,Active,9.37,5
+VZ000413,Texas,Limited 10GB,2023-08-23,55,Active,39.2,4
+VZ000414,California,Limited 10GB,2023-11-26,40,Active,10.91,5
+VZ000415,Pennsylvania,Unlimited,2024-03-22,45,Churned,14.96,2
+VZ000416,New York,Limited 5GB,2024-07-21,40,Active,12.67,3
+VZ000417,Pennsylvania,Limited 10GB,2023-05-31,70,Churned,22.28,3
+VZ000418,Michigan,Unlimited,2024-11-16,70,Churned,39.67,3
+VZ000419,North Carolina,Unlimited,2023-04-23,40,Active,28.75,1
+VZ000420,New York,Limited 10GB,2023-02-07,45,Active,4.67,1
+VZ000421,Pennsylvania,Unlimited,2023-04-02,40,Churned,49.02,1
+VZ000422,North Carolina,Unlimited,2024-02-28,55,Active,28.94,3
+VZ000423,Florida,Unlimited,2024-12-05,40,Active,17.53,3
+VZ000424,North Carolina,Limited 5GB,2024-07-25,40,Churned,26.97,3
+VZ000425,Ohio,Unlimited,2023-04-10,45,Active,16.55,5
+VZ000426,New York,Prepaid,2023-05-07,70,Active,44.67,2
+VZ000427,Ohio,Limited 5GB,2024-12-18,55,Active,26.75,2
+VZ000428,Illinois,Limited 5GB,2024-03-22,70,Active,10.39,1
+VZ000429,Ohio,Prepaid,2024-05-14,45,Active,33.58,2
+VZ000430,California,Prepaid,2023-03-06,55,Active,26.92,1
+VZ000431,Georgia,Prepaid,2024-05-19,40,Active,5.14,1
+VZ000432,Florida,Prepaid,2024-04-18,70,Active,41.0,4
+VZ000433,Texas,Limited 5GB,2024-01-18,40,Active,36.08,2
+VZ000434,California,Limited 10GB,2024-12-20,70,Active,12.08,3
+VZ000435,Texas,Unlimited,2023-05-20,45,Active,10.21,5
+VZ000436,Ohio,Unlimited,2023-12-14,45,Active,24.3,4
+VZ000437,New York,Unlimited,2023-01-02,45,Active,24.24,4
+VZ000438,Ohio,Limited 5GB,2024-02-14,40,Churned,39.44,3
+VZ000439,California,Unlimited,2023-09-12,70,Active,2.76,3
+VZ000440,Texas,Prepaid,2024-07-19,45,Active,8.48,4
+VZ000441,Texas,Prepaid,2023-07-13,55,Active,7.31,5
+VZ000442,California,Limited 10GB,2024-02-04,45,Churned,15.66,3
+VZ000443,New York,Unlimited,2024-09-29,40,Active,45.12,2
+VZ000444,California,Limited 10GB,2024-07-13,45,Active,25.46,5
+VZ000445,Georgia,Limited 5GB,2023-03-15,55,Active,17.91,1
+VZ000446,California,Limited 10GB,2023-01-28,55,Churned,13.89,5
+VZ000447,Florida,Unlimited,2023-03-03,40,Active,37.59,3
+VZ000448,Michigan,Unlimited,2023-08-31,40,Churned,40.47,3
+VZ000449,Georgia,Limited 10GB,2023-01-28,45,Active,24.42,1
+VZ000450,Illinois,Unlimited,2024-12-26,45,Active,46.76,5
+VZ000451,North Carolina,Unlimited,2023-03-03,45,Churned,23.96,3
+VZ000452,North Carolina,Limited 10GB,2023-09-14,45,Churned,15.77,3
+VZ000453,New York,Limited 10GB,2023-10-15,70,Active,4.6,5
+VZ000454,Michigan,Unlimited,2024-06-14,40,Active,32.64,3
+VZ000455,Michigan,Limited 10GB,2024-04-22,45,Active,29.6,1
+VZ000456,New York,Unlimited,2023-05-03,55,Active,37.17,3
+VZ000457,Texas,Limited 10GB,2024-02-24,45,Active,20.75,1
+VZ000458,Michigan,Unlimited,2023-03-28,45,Active,13.94,3
+VZ000459,North Carolina,Limited 10GB,2023-06-18,70,Active,41.78,2
+VZ000460,Ohio,Unlimited,2023-08-17,40,Churned,33.8,3
+VZ000461,Texas,Prepaid,2024-02-05,45,Active,23.56,3
+VZ000462,Texas,Unlimited,2024-02-06,45,Active,12.93,1
+VZ000463,Pennsylvania,Unlimited,2023-05-15,55,Active,18.06,2
+VZ000464,New York,Unlimited,2024-04-01,45,Churned,23.1,2
+VZ000465,Ohio,Prepaid,2024-04-21,45,Active,3.74,2
+VZ000466,New York,Limited 10GB,2024-05-09,70,Active,27.56,3
+VZ000467,Michigan,Limited 5GB,2023-02-27,45,Churned,21.17,2
+VZ000468,Florida,Limited 5GB,2023-12-20,40,Active,33.71,4
+VZ000469,California,Unlimited,2024-03-25,40,Churned,14.87,2
+VZ000470,New York,Unlimited,2024-12-04,55,Churned,25.75,3
+VZ000471,Ohio,Limited 10GB,2024-01-13,55,Active,19.57,3
+VZ000472,North Carolina,Prepaid,2023-10-29,40,Active,21.46,1
+VZ000473,Michigan,Unlimited,2024-12-30,55,Active,40.9,1
+VZ000474,Michigan,Limited 10GB,2024-12-29,70,Active,12.1,4
+VZ000475,Georgia,Limited 10GB,2023-03-26,40,Active,46.58,3
+VZ000476,California,Limited 10GB,2023-04-17,55,Active,44.42,5
+VZ000477,Ohio,Limited 5GB,2023-12-08,55,Active,9.46,2
+VZ000478,Michigan,Unlimited,2023-02-10,45,Active,23.47,1
+VZ000479,Illinois,Unlimited,2023-11-01,45,Active,35.35,4
+VZ000480,Georgia,Unlimited,2023-06-02,40,Active,44.11,1
+VZ000481,Georgia,Limited 10GB,2024-05-13,55,Active,27.27,1
+VZ000482,Georgia,Unlimited,2024-04-25,45,Active,23.05,3
+VZ000483,Georgia,Unlimited,2023-12-04,55,Active,13.14,4
+VZ000484,Pennsylvania,Unlimited,2023-06-19,40,Active,20.11,3
+VZ000485,Illinois,Limited 10GB,2024-09-10,45,Active,9.48,5
+VZ000486,Illinois,Limited 10GB,2023-03-14,55,Churned,43.71,4
+VZ000487,Georgia,Prepaid,2023-08-08,70,Active,15.31,5
+VZ000488,Michigan,Limited 5GB,2023-09-02,55,Active,13.98,3
+VZ000489,New York,Limited 10GB,2024-08-01,70,Churned,47.74,3
+VZ000490,New York,Unlimited,2024-01-23,45,Churned,12.98,4
+VZ000491,Georgia,Prepaid,2024-12-06,55,Active,13.97,2
+VZ000492,Illinois,Prepaid,2023-05-28,55,Active,39.96,3
+VZ000493,California,Prepaid,2023-09-16,70,Active,6.04,5
+VZ000494,Michigan,Unlimited,2024-04-25,45,Active,49.07,2
+VZ000495,Georgia,Unlimited,2023-03-29,55,Active,14.44,1
+VZ000496,North Carolina,Limited 5GB,2023-03-13,55,Active,18.78,4
+VZ000497,Illinois,Limited 10GB,2024-12-18,45,Active,33.21,5
+VZ000498,Michigan,Limited 5GB,2023-06-29,45,Active,38.04,4
+VZ000499,California,Unlimited,2024-07-13,70,Active,15.06,5
+VZ000500,Florida,Limited 10GB,2023-02-11,55,Active,19.42,1

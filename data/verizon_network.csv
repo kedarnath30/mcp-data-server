@@ -1,0 +1,11 @@
+state,coverage_percent,avg_download_mbps,avg_upload_mbps,network_satisfaction
+California,94.4,95.5,11.5,4.5
+Texas,95.6,105.2,33.9,4.2
+Florida,92.0,141.0,11.5,4.6
+New York,92.6,78.6,21.9,4.7
+Pennsylvania,94.0,63.3,34.2,4.2
+Illinois,98.4,116.7,35.3,4.3
+Ohio,98.8,141.9,28.6,4.9
+Georgia,92.1,110.4,15.4,4.0
+North Carolina,96.7,87.0,23.8,4.0
+Michigan,94.6,127.8,18.2,4.3
