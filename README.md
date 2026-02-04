@@ -36,6 +36,11 @@ This project showcases a production-ready integration between AI language models
 - **Scalability**: Handles 10,000+ rows per export
 - **Error Handling**: Comprehensive validation and user-friendly error messages
 
+### 🤖 Natural Language Queries (NEW!)
+- **Ask Questions in Plain English**: "What's our total revenue by product?"
+- **Automatic SQL Generation**: Claude converts questions to optimized SQL
+- **Instant Results**: Execute queries and see data in seconds
+- **No SQL Knowledge Required**: Perfect for business users
 ---
 
 ## 🏗️ Architecture
