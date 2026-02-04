@@ -41,6 +41,18 @@ This project showcases a production-ready integration between AI language models
 - **Automatic SQL Generation**: Claude converts questions to optimized SQL
 - **Instant Results**: Execute queries and see data in seconds
 - **No SQL Knowledge Required**: Perfect for business users
+- **Natural Language Queries**: Ask "What's our total revenue?" and get instant SQL results ✨ NEW!
+### Natural Language Queries
+```bash
+# Ask questions in plain English!
+python -c "from nl_to_sql import NaturalLanguageQueryEngine; engine = NaturalLanguageQueryEngine(); print(engine.query('What is our total revenue?'))"
+```
+
+Examples:
+- "What's our total revenue by product?"
+- "Show me the top 5 customers"
+- "Which sales rep has the most sales?"
+- "What's our average deal size by region?"
 ---
 
 ## 🏗️ Architecture
