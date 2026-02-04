@@ -1,0 +1,51 @@
+customer_id,company_name,industry,region,tier,lifetime_value
+C0001,Company B1,Retail,Europe,SMB,470989
+C0002,Company C2,Retail,Asia Pacific,SMB,345569
+C0003,Company D3,Technology,Asia Pacific,SMB,485760
+C0004,Company E4,Manufacturing,Europe,Mid-Market,456196
+C0005,Company F5,Healthcare,Latin America,SMB,176649
+C0006,Company G6,Manufacturing,Latin America,Mid-Market,275515
+C0007,Company H7,Manufacturing,Asia Pacific,SMB,327397
+C0008,Company I8,Retail,Latin America,Mid-Market,249616
+C0009,Company J9,Technology,North America,Mid-Market,304719
+C0010,Company K10,Retail,Europe,Mid-Market,425773
+C0011,Company L11,Retail,Asia Pacific,Mid-Market,491466
+C0012,Company M12,Technology,North America,Enterprise,62452
+C0013,Company N13,Finance,Latin America,Mid-Market,81695
+C0014,Company O14,Manufacturing,Europe,Mid-Market,393634
+C0015,Company P15,Healthcare,Asia Pacific,Mid-Market,243060
+C0016,Company Q16,Retail,Europe,SMB,108425
+C0017,Company R17,Technology,Latin America,Mid-Market,163784
+C0018,Company S18,Manufacturing,Europe,Enterprise,199571
+C0019,Company T19,Retail,Europe,Enterprise,279149
+C0020,Company U20,Manufacturing,Asia Pacific,SMB,325503
+C0021,Company V21,Healthcare,Latin America,SMB,323607
+C0022,Company W22,Manufacturing,Asia Pacific,Enterprise,395125
+C0023,Company X23,Manufacturing,Asia Pacific,Mid-Market,149210
+C0024,Company Y24,Technology,Europe,SMB,490076
+C0025,Company Z25,Technology,Asia Pacific,Mid-Market,306226
+C0026,Company A26,Finance,Latin America,Mid-Market,409707
+C0027,Company B27,Healthcare,North America,Mid-Market,232269
+C0028,Company C28,Manufacturing,Asia Pacific,SMB,458419
+C0029,Company D29,Finance,Latin America,Enterprise,268804
+C0030,Company E30,Manufacturing,Latin America,Mid-Market,396024
+C0031,Company F31,Technology,Europe,SMB,161619
+C0032,Company G32,Manufacturing,North America,Mid-Market,414131
+C0033,Company H33,Retail,Asia Pacific,Mid-Market,100436
+C0034,Company I34,Finance,Latin America,Mid-Market,314107
+C0035,Company J35,Manufacturing,Asia Pacific,SMB,404629
+C0036,Company K36,Technology,North America,SMB,496964
+C0037,Company L37,Healthcare,Asia Pacific,Mid-Market,219799
+C0038,Company M38,Retail,Europe,Mid-Market,477631
+C0039,Company N39,Healthcare,North America,SMB,357370
+C0040,Company O40,Manufacturing,North America,Mid-Market,106580
+C0041,Company P41,Manufacturing,Europe,SMB,312392
+C0042,Company Q42,Manufacturing,Asia Pacific,SMB,228286
+C0043,Company R43,Finance,Europe,Enterprise,292638
+C0044,Company S44,Finance,Europe,Enterprise,268235
+C0045,Company T45,Healthcare,Asia Pacific,Mid-Market,418301
+C0046,Company U46,Healthcare,Europe,Mid-Market,438646
+C0047,Company V47,Finance,Latin America,Enterprise,353467
+C0048,Company W48,Healthcare,Europe,Mid-Market,192005
+C0049,Company X49,Healthcare,Latin America,SMB,110907
+C0050,Company Y50,Technology,Europe,Enterprise,342689

@@ -1,0 +1,39 @@
+# Virtual Environment
+venv/
+env/
+ENV/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Environment variables
+.env
+
+# Database files
+*.db
+*.sqlite
+*.sqlite3
+
+# Power BI temporary files
+*.pbix
+
+# Excel exports (keep samples, ignore timestamped ones)
+powerbi_exports/powerbi_dataset_202*.xlsx
+powerbi_exports/query_export_*.xlsx
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log

@@ -1,0 +1,7 @@
+mcp
+sqlalchemy
+pandas
+python-dotenv
+anthropic
+openpyxl
+xlsxwriter
