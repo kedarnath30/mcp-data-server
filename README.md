@@ -306,6 +306,10 @@ Former Junior Data Analyst @ Cognizant
 ### Automated Refresh Pipeline
 ![Terminal Output](screenshots/terminal-output.png)
 
+### Verizon Mobile Performance Dashboard (Practice Project)
+![Verizon Mobile Dashboard](screenshots/verizon-dashboard.png)  
+*Telecom analytics dashboard tracking 418 active subscribers, $26.03K monthly revenue, 16.4% churn rate, and $62.27 ARPU across 10 states*
+
 ---
 
 **⭐ If you found this project helpful, please give it a star!**
