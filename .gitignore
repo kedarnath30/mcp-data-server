@@ -37,3 +37,6 @@ Thumbs.db
 
 # Logs
 *.log
+
+# Streamlit secrets (never commit these)
+.streamlit/secrets.toml
