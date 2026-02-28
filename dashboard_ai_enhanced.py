@@ -1759,7 +1759,7 @@ def main():
         <div style='display:flex;align-items:center;gap:0.6rem;margin-bottom:0.25rem'>
             <span style='font-size:1.4rem'>📊</span>
             <span style='font-size:1.4rem;font-weight:800;color:#f1f5f9;letter-spacing:-0.5px'>DashAI</span>
-            <span style='background:#6366f115;border:1px solid #6366f130;border-radius:4px;padding:0.1rem 0.45rem;font-size:0.65rem;font-weight:700;color:#818cf8;text-transform:uppercase;letter-spacing:0.1em'>v11</span>
+
         </div>
         <p style='color:#64748b;font-size:0.8rem;margin:0;font-weight:500'>
         AI Dashboard Builder &nbsp;·&nbsp; Natural Language Queries &nbsp;·&nbsp; Auto Data Cleaning &nbsp;·&nbsp; PDF & PowerPoint Export
@@ -1813,6 +1813,34 @@ def main():
     with tab1:
         _render_step1_bq()
         st.divider()
+
+        # ── Sample Data Quick-Start ─────────────────────────────────────
+        st.markdown("""<div style='background:linear-gradient(90deg,#0f4c3a,#0d6e50);
+            border:1px solid #10b98140;border-radius:10px;padding:0.9rem 1.25rem;
+            margin-bottom:1rem;display:flex;align-items:center;gap:0.75rem'>
+            <span style='font-size:1.3rem'>🚀</span>
+            <span style='color:#6ee7b7;font-weight:700;font-size:0.875rem'>No data handy?</span>
+            <span style='color:#94a3b8;font-size:0.825rem'>Try DashAI instantly with a built-in sample sales dataset.</span>
+        </div>""", unsafe_allow_html=True)
+        if st.button("▶ Try with Sample Data", key="sample_data_btn"):
+            np.random.seed(42)
+            n = 300
+            sample_df = pd.DataFrame({
+                'Month':       pd.date_range('2023-01-01', periods=n, freq='D').strftime('%Y-%m'),
+                'Region':      np.random.choice(['North','South','East','West'], n),
+                'Product':     np.random.choice(['Starter','Pro','Enterprise','Basic'], n),
+                'Sales_Rep':   np.random.choice(['Alice','Bob','Carol','David','Eve'], n),
+                'Revenue':     np.random.randint(500, 15000, n),
+                'Units_Sold':  np.random.randint(1, 50, n),
+                'Customer_Satisfaction': np.round(np.random.uniform(3.0, 5.0, n), 1),
+                'Churn':       np.random.choice([0, 1], n, p=[0.85, 0.15]),
+            })
+            st.session_state['uploaded_df'] = sample_df
+            st.success("✅ Sample dataset loaded — set a business question above, then explore the other tabs!")
+            st.dataframe(sample_df.head(5), use_container_width=True)
+        # ───────────────────────────────────────────────────────────────
+        st.markdown("#### — or upload your own file —")
+
         df, loaded = _load_data()
         if loaded and df is not None:
             with st.expander("Data Quality Check"):
