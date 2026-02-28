@@ -155,9 +155,13 @@ def compute_quality_score(df):
 
 @st.cache_resource
 def get_claude_client():
-    api_key = os.getenv('ANTHROPIC_API_KEY')
+    # Try Streamlit secrets first (for Streamlit Cloud deployment)
+    api_key = st.secrets.get("ANTHROPIC_API_KEY", None) if hasattr(st, 'secrets') else None
+    # Fall back to environment variable (for local development)
     if not api_key:
-        st.error("❌ ANTHROPIC_API_KEY not found in .env")
+        api_key = os.getenv('ANTHROPIC_API_KEY')
+    if not api_key:
+        st.error("❌ ANTHROPIC_API_KEY not found. For local dev: add to .env. For Streamlit Cloud: add to app secrets.")
         return None
     return Anthropic(api_key=api_key)
 
