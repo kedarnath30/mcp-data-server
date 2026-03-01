@@ -1759,8 +1759,7 @@ def main():
         <div style='display:flex;align-items:center;gap:0.6rem;margin-bottom:0.25rem'>
             <span style='font-size:1.4rem'>📊</span>
             <span style='font-size:1.4rem;font-weight:800;color:#f1f5f9;letter-spacing:-0.5px'>DashAI</span>
-
-        </div>
+            </div>
         <p style='color:#64748b;font-size:0.8rem;margin:0;font-weight:500'>
         AI Dashboard Builder &nbsp;·&nbsp; Natural Language Queries &nbsp;·&nbsp; Auto Data Cleaning &nbsp;·&nbsp; PDF & PowerPoint Export
         </p>
