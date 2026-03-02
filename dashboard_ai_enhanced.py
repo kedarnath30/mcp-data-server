@@ -130,35 +130,45 @@ for key, default in [
 
 
 def compute_quality_score(df):
-    score = 100
-    missing_pct = df.isnull().mean().mean() * 100
-    score -= min(30, missing_pct * 2)
-    dup_pct = df.duplicated().mean() * 100
-    score -= min(20, dup_pct * 5)
-    obj_cols = df.select_dtypes(include='object').columns
-    type_issues = 0
-    for col in obj_cols:
-        sample = df[col].dropna().head(50)
-        try:
-            pd.to_numeric(sample)
-            type_issues += 1
-        except Exception:
-            pass
-    score -= min(20, type_issues * 4)
-    num_cols = df.select_dtypes(include='number').columns
-    outlier_cols = 0
-    for col in num_cols[:8]:
-        q1, q3 = df[col].quantile(0.25), df[col].quantile(0.75)
-        iqr = q3 - q1
-        if iqr > 0:
-            outlier_pct = ((df[col] < q1 - 3*iqr) | (df[col] > q3 + 3*iqr)).mean() * 100
-            if outlier_pct > 5:
-                outlier_cols += 1
-    score -= min(15, outlier_cols * 3)
-    fill_rate = (1 - df.isnull().mean().mean()) * 100
-    if fill_rate > 95:
-        score += 5
-    return max(0, min(100, round(score)))
+    try:
+        score = 100
+        missing_pct = df.isnull().mean().mean() * 100
+        score -= min(30, missing_pct * 2)
+        dup_pct = df.duplicated().mean() * 100
+        score -= min(20, dup_pct * 5)
+        obj_cols = df.select_dtypes(include='object').columns
+        type_issues = 0
+        for col in obj_cols:
+            sample = df[col].dropna().head(50)
+            try:
+                pd.to_numeric(sample)
+                type_issues += 1
+            except Exception:
+                pass
+        score -= min(20, type_issues * 4)
+        # Only check numeric columns — coerce to numeric first to avoid str/float comparison errors
+        num_cols = df.select_dtypes(include='number').columns
+        outlier_cols = 0
+        for col in num_cols[:8]:
+            try:
+                col_data = pd.to_numeric(df[col], errors='coerce').dropna()
+                if len(col_data) < 4:
+                    continue
+                q1, q3 = col_data.quantile(0.25), col_data.quantile(0.75)
+                iqr = q3 - q1
+                if iqr > 0:
+                    outlier_pct = ((col_data < q1 - 3*iqr) | (col_data > q3 + 3*iqr)).mean() * 100
+                    if outlier_pct > 5:
+                        outlier_cols += 1
+            except Exception:
+                continue
+        score -= min(15, outlier_cols * 3)
+        fill_rate = (1 - df.isnull().mean().mean()) * 100
+        if fill_rate > 95:
+            score += 5
+        return max(0, min(100, round(score)))
+    except Exception:
+        return 75  # safe fallback
 
 
 @st.cache_resource
@@ -639,25 +649,44 @@ def render_analyst_report(report, df, client):
         before = st.session_state['quality_before']
         after = st.session_state['quality_after']
         delta = after - before
-        delta_color = "#10b981" if delta >= 0 else "#ef4444"
-        delta_icon = "↑" if delta >= 0 else "↓"
-        st.markdown(f"""<div style='background:#12131f;border:1px solid #1e2035;border-radius:14px;padding:1.25rem 1.5rem;margin:0.75rem 0'>
-          <div style='font-size:0.7rem;font-weight:700;color:#6366f1;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.75rem'>✅ Data Quality — Before vs After Cleaning</div>
-          <div style='display:flex;align-items:center;gap:2rem;flex-wrap:wrap'>
-            <div style='text-align:center;min-width:90px'>
-              <div style='font-size:0.7rem;color:#64748b;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:0.25rem'>Before</div>
-              <div style='font-size:2.2rem;font-weight:800;color:{"#10b981" if before>=80 else "#f59e0b" if before>=60 else "#ef4444"}'>{before}%</div>
-            </div>
-            <div style='text-align:center;flex:1;min-width:80px'>
-              <div style='font-size:2rem;color:#2d3050'>→</div>
-              <div style='font-size:1rem;font-weight:700;color:{delta_color}'>{delta_icon} {abs(delta)} pts</div>
-            </div>
-            <div style='text-align:center;min-width:90px'>
-              <div style='font-size:0.7rem;color:#64748b;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:0.25rem'>After</div>
-              <div style='font-size:2.2rem;font-weight:800;color:{"#10b981" if after>=80 else "#f59e0b" if after>=60 else "#ef4444"}'>{after}%</div>
-            </div>
-          </div>
-        </div>""", unsafe_allow_html=True)
+        def _qc(v): return "#10b981" if v >= 80 else "#f59e0b" if v >= 60 else "#ef4444"
+        if delta == 0 and after >= 95:
+            st.markdown(f"""<div style='background:#0d2318;border:1px solid #166534;border-radius:14px;padding:1rem 1.5rem;margin:0.75rem 0;display:flex;align-items:center;gap:1rem'>
+              <div style='font-size:1.8rem'>✅</div>
+              <div>
+                <div style='font-size:0.68rem;font-weight:700;color:#10b981;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.2rem'>Data Already High Quality</div>
+                <div style='color:#86efac;font-size:0.875rem'>Score: <strong style='font-size:1.2rem;color:{_qc(after)}'>{after}%</strong> — No significant issues found. Your data is clean and ready for analysis.</div>
+              </div>
+            </div>""", unsafe_allow_html=True)
+        else:
+            delta_color = "#10b981" if delta >= 0 else "#ef4444"
+            delta_icon = "↑" if delta > 0 else ("↓" if delta < 0 else "→")
+            improvements_html = ""
+            if delta > 0:
+                improvements_html = """<div style='flex:2;min-width:160px;padding-left:1rem;border-left:1px solid #166534'>
+              <div style='font-size:0.75rem;color:#86efac;font-weight:600;margin-bottom:0.25rem'>What improved:</div>
+              <div style='font-size:0.78rem;color:#64748b'>• Missing values imputed</div>
+              <div style='font-size:0.78rem;color:#64748b'>• Duplicates removed</div>
+              <div style='font-size:0.78rem;color:#64748b'>• Types fixed, features engineered</div>
+            </div>"""
+            st.markdown(f"""<div style='background:#0d2318;border:1px solid #166534;border-radius:14px;padding:1.25rem 1.5rem;margin:0.75rem 0'>
+              <div style='font-size:0.7rem;font-weight:700;color:#10b981;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.75rem'>✅ Data Quality — Before vs After Cleaning</div>
+              <div style='display:flex;align-items:center;gap:2rem;flex-wrap:wrap'>
+                <div style='text-align:center;min-width:90px'>
+                  <div style='font-size:0.7rem;color:#64748b;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:0.25rem'>Before</div>
+                  <div style='font-size:2.2rem;font-weight:800;color:{_qc(before)}'>{before}%</div>
+                </div>
+                <div style='text-align:center;flex:1;min-width:80px'>
+                  <div style='font-size:2rem;color:#2d3050'>→</div>
+                  <div style='font-size:1rem;font-weight:700;color:{delta_color}'>{delta_icon} {abs(delta)} pts</div>
+                </div>
+                <div style='text-align:center;min-width:90px'>
+                  <div style='font-size:0.7rem;color:#64748b;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:0.25rem'>After</div>
+                  <div style='font-size:2.2rem;font-weight:800;color:{_qc(after)}'>{after}%</div>
+                </div>
+                {improvements_html}
+              </div>
+            </div>""", unsafe_allow_html=True)
 
     if suggestions:
         st.divider()
@@ -1273,7 +1302,13 @@ Respond ONLY with JSON."""
                         _resp = client.messages.create(model="claude-sonnet-4-20250514", max_tokens=3000, messages=[{"role": "user", "content": qw_prompt}])
                         _parsed = extract_json(_resp.content[0].text)
                         if _parsed and _parsed.get('code'):
-                            _out = _safe_clean_exec(_parsed['code'], _df)
+                            # Pre-coerce any numeric-looking object columns to avoid str/float comparison errors
+                            _df_safe = _df.copy()
+                            for _col in _df_safe.select_dtypes(include='object').columns:
+                                _converted = pd.to_numeric(_df_safe[_col], errors='coerce')
+                                if _converted.notna().sum() > len(_df_safe) * 0.7:
+                                    _df_safe[_col] = _converted
+                            _out = _safe_clean_exec(_parsed['code'], _df_safe)
                             if _out['error']:
                                 st.error(f"Auto-apply error: {_out['error']}")
                             elif _out['result'] is not None and isinstance(_out['result'], pd.DataFrame):
@@ -1890,10 +1925,28 @@ def main():
                 before = st.session_state['quality_before']
                 after  = st.session_state['quality_after']
                 delta  = after - before
-                dc = '#10b981' if delta >= 0 else '#ef4444'
-                di = '↑' if delta >= 0 else '↓'
                 def _qcolor(v): return '#10b981' if v >= 80 else '#f59e0b' if v >= 60 else '#ef4444'
-                st.markdown(f"""
+                if delta == 0 and after >= 95:
+                    st.markdown(f"""
+<div style='background:#0d2318;border:1px solid #166534;border-radius:14px;padding:1rem 1.5rem;margin:0.5rem 0 1rem 0;display:flex;align-items:center;gap:1rem'>
+  <div style='font-size:1.8rem'>✅</div>
+  <div>
+    <div style='font-size:0.68rem;font-weight:700;color:#10b981;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.2rem'>Data Already High Quality</div>
+    <div style='color:#86efac;font-size:0.875rem'>Score: <strong style='font-size:1.2rem;color:{_qcolor(after)}'>{after}%</strong> — No significant issues found. Your data is clean and ready for analysis.</div>
+  </div>
+</div>""", unsafe_allow_html=True)
+                else:
+                    dc = '#10b981' if delta >= 0 else '#ef4444'
+                    di = '↑' if delta > 0 else ('↓' if delta < 0 else '→')
+                    improvements_html = ""
+                    if delta > 0:
+                        improvements_html = """<div style='flex:2;min-width:160px;padding-left:1rem;border-left:1px solid #166534'>
+    <div style='font-size:0.75rem;color:#86efac;font-weight:600;margin-bottom:0.25rem'>What improved:</div>
+    <div style='font-size:0.78rem;color:#64748b'>• Missing values imputed</div>
+    <div style='font-size:0.78rem;color:#64748b'>• Duplicates removed</div>
+    <div style='font-size:0.78rem;color:#64748b'>• Types fixed, features engineered</div>
+    </div>"""
+                    st.markdown(f"""
 <div style='background:#0d2318;border:1px solid #166534;border-radius:14px;padding:1rem 1.5rem;margin:0.5rem 0 1rem 0'>
   <div style='font-size:0.68rem;font-weight:700;color:#10b981;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.75rem'>✅ Data Quality — Before vs After Cleaning</div>
   <div style='display:flex;align-items:center;gap:2.5rem;flex-wrap:wrap'>
@@ -1909,12 +1962,7 @@ def main():
       <div style='font-size:0.65rem;color:#64748b;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:0.25rem'>After</div>
       <div style='font-size:2.4rem;font-weight:800;color:{_qcolor(after)}'>{after}%</div>
     </div>
-    <div style='flex:2;min-width:160px;padding-left:1rem;border-left:1px solid #166534'>
-    <div style='font-size:0.75rem;color:#86efac;font-weight:600;margin-bottom:0.25rem'>What improved:</div>
-    <div style='font-size:0.78rem;color:#64748b'>• Missing values imputed</div>
-    <div style='font-size:0.78rem;color:#64748b'>• Duplicates removed</div>
-    <div style='font-size:0.78rem;color:#64748b'>• Types fixed, features engineered</div>
-    </div>
+    {improvements_html}
   </div>
 </div>""", unsafe_allow_html=True)
             else:
