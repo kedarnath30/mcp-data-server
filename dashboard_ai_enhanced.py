@@ -1192,10 +1192,13 @@ def render_recommendations(rec, df, client):
                 "priority": r.get("priority","medium"), "category": r.get("category","General"),
             })
         sdf = pd.DataFrame(scatter_data)
-        fig = px.scatter(sdf, x="effort", y="impact", color="priority", text="title", size=[20]*len(sdf),
+        fig = px.scatter(sdf, x="effort", y="impact", color="priority",
+                        size=[30]*len(sdf),
                         color_discrete_map={"critical":"#ef4444","high":"#f97316","medium":"#f59e0b","low":"#10b981"},
-                        labels={"effort":"Effort","impact":"Impact"}, title="Effort × Impact Matrix")
-        fig.update_traces(textposition='top center', textfont=dict(size=10, color='#94a3b8'))
+                        labels={"effort":"Effort","impact":"Impact"},
+                        title="Effort × Impact Matrix",
+                        hover_data={"title": True, "effort": False, "impact": False, "priority": False})
+        fig.update_traces(textfont=dict(size=10, color='#94a3b8'), hovertemplate="<b>%{customdata[0]}</b><extra></extra>")
         fig.update_xaxes(tickvals=[1,2,3], ticktext=["Low","Medium","High"])
         fig.update_yaxes(tickvals=[1,2,3], ticktext=["Low","Medium","High"])
         fig = style_fig(fig, height=380)
@@ -1907,14 +1910,18 @@ def main():
       <div style='font-size:2.4rem;font-weight:800;color:{_qcolor(after)}'>{after}%</div>
     </div>
     <div style='flex:2;min-width:160px;padding-left:1rem;border-left:1px solid #166534'>
-      <div style='font-size:0.75rem;color:#86efac;font-weight:600;margin-bottom:0.25rem'>What improved:</div>
-      <div style='font-size:0.78rem;color:#64748b'>• Missing values imputed</div>
-      <div style='font-size:0.78rem;color:#64748b'>• Duplicates removed</div>
-      <div style='font-size:0.78rem;color:#64748b'>• Types fixed, features engineered</div>
+    <div style='font-size:0.75rem;color:#86efac;font-weight:600;margin-bottom:0.25rem'>What improved:</div>
+    <div style='font-size:0.78rem;color:#64748b'>• Missing values imputed</div>
+    <div style='font-size:0.78rem;color:#64748b'>• Duplicates removed</div>
+    <div style='font-size:0.78rem;color:#64748b'>• Types fixed, features engineered</div>
     </div>
   </div>
 </div>""", unsafe_allow_html=True)
-
+            else:
+                st.markdown(f"""
+<div style='background:#0d2318;border:1px solid #166534;border-radius:14px;padding:1rem 1.5rem;margin:0.5rem 0 1rem 0'>
+  <div style='font-size:0.68rem;font-weight:700;color:#10b981;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.75rem'>⏳ Cleaning Applied — Recalculating Quality…</div>
+</div>""", unsafe_allow_html=True)
             if st.session_state['analyst_report']:
                 render_analyst_report(st.session_state['analyst_report'], df, client)
                 if st.session_state['cleaned_df'] is not None:
