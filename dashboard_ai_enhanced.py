@@ -37,6 +37,7 @@ st.markdown("""
   .info-card p{margin:0;color:#8B8B8B;font-size:.82rem}
   .anomaly-box{background:#1A0A00;border:1px solid #FF3300;border-left:4px solid #FF3300;border-radius:8px;padding:.75rem 1rem;margin:.5rem 0;font-size:.85rem;color:#FFB3A0}
   .warn-box{background:#1A1000;border:1px solid #FFBB33;border-left:4px solid #FFBB33;border-radius:8px;padding:.6rem 1rem;margin:.4rem 0;font-size:.82rem;color:#FFE0A0}
+  .ok-box{background:#0C2010;border:1px solid #1A5C2A;border-left:4px solid #4ADE80;border-radius:8px;padding:.75rem 1rem;margin:.5rem 0;font-size:.85rem;color:#A0FFB3}
   .router-badge{display:inline-flex;align-items:center;gap:.3rem;background:#111;border:1px solid #2E2E2E;border-radius:6px;padding:.15rem .5rem;font-size:.7rem;font-family:'Space Grotesk',sans-serif;color:#6B6B6B}
   .haiku-color{color:#4ADE80}.sonnet-color{color:#FFBB33}.opus-color{color:#FF5C00}
   .cost-pill{background:#0C2010;border:1px solid #1A5C2A;border-radius:999px;padding:.15rem .6rem;font-size:.7rem;color:#4ADE80;font-family:'Space Grotesk',sans-serif;font-weight:700}
@@ -73,9 +74,11 @@ def get_palette(idx=0): return CHART_PALETTES[idx % len(CHART_PALETTES)]
 def get_color(idx=0):   return CHART_SINGLE[idx % len(CHART_SINGLE)]
 
 # ── Constants ─────────────────────────────────────────────────────────────────
-MAX_ROWS_FULL   = 50_000
-MAX_SAMPLE_ROWS = 500
-MAX_COLS_DESC   = 20
+MAX_ROWS_FULL   = 50_000   # above this = large dataset mode
+MAX_SAMPLE_ROWS = 2_000    # rows sent to Claude AI prompts (increased from 500)
+MAX_PLOT_ROWS   = 10_000   # rows used for chart rendering
+MAX_ANOMALY_ROWS= 10_000   # rows used for anomaly detection
+MAX_COLS_DESC   = 20       # max numeric cols in describe()
 
 MODEL_PRICING = {
     "claude-haiku-4-5":  {"input": 0.80,  "output": 4.00},
@@ -134,9 +137,8 @@ def init_state():
         "kpis":{}, "snapshots":[],
         "question_set":False, "data_loaded":False, "analysed":False, "data_cleaned":False,
         "session_cost":0.0, "session_tokens":0, "model_calls":{"haiku":0,"sonnet":0,"opus":0},
-        "large_dataset":False,
-        "active_role":"",
-        "dashboard_desc":"",
+        "large_dataset":False, "dataset_rows":0, "dataset_cols":0,
+        "active_role":"", "dashboard_desc":"",
     }
     for k, v in D.items():
         if k not in st.session_state: st.session_state[k] = v
@@ -149,10 +151,10 @@ def is_large(df): return len(df) > MAX_ROWS_FULL
 def sdf(df, n=MAX_SAMPLE_ROWS): return df if len(df) <= n else df.sample(n=n, random_state=42)
 
 def df_summary(df, max_rows=5):
-    ds = sdf(df, max(max_rows*10, 100)) if is_large(df) else df
+    ds = sdf(df, max(max_rows * 10, MAX_SAMPLE_ROWS)) if is_large(df) else df
     b = io.StringIO()
     b.write(f"Shape: {df.shape[0]:,} rows x {df.shape[1]} columns")
-    b.write(f" (sample of {len(ds):,})\n" if is_large(df) else "\n")
+    b.write(f" (analysis based on {len(ds):,}-row sample)\n" if is_large(df) else "\n")
     b.write(f"Columns: {list(df.columns)}\n")
     b.write(f"Dtypes:\n{df.dtypes.to_string()}\n")
     b.write(f"Sample:\n{ds.head(max_rows).to_string()}\n")
@@ -196,7 +198,7 @@ def auto_clean(df):
     return df
 
 def detect_anomalies(df):
-    ds = sdf(df, 10_000) if is_large(df) else df
+    ds = sdf(df, MAX_ANOMALY_ROWS) if is_large(df) else df
     alerts = []
     for c in ds.select_dtypes(include=[np.number]).columns[:8]:
         q1, q3 = ds[c].quantile(.25), ds[c].quantile(.75)
@@ -209,7 +211,7 @@ def detect_anomalies(df):
 
 def build_chart(df, ctype, x, y, color=None, title="", color_idx=0):
     try:
-        dp = sdf(df, 5_000) if is_large(df) else df.copy()
+        dp = sdf(df, MAX_PLOT_ROWS) if is_large(df) else df.copy()
         if y and y in dp.columns: dp[y] = snum(dp[y]); dp = dp.dropna(subset=[y])
         if x and x in dp.columns: dp = dp.dropna(subset=[x])
         if len(dp) == 0: st.warning(f"No data to plot: {title}"); return None
@@ -286,7 +288,7 @@ def get_sample_data():
     df["Month"]  = df["Date"].dt.strftime("%b %Y")
     return df
 
-# ── FIX 2: render_so_what — fully inline styles, no CSS class dependencies ────
+# ── So What Renderer ──────────────────────────────────────────────────────────
 def render_so_what(sw):
     if not sw or not isinstance(sw, dict): return
     uc  = {"immediate":"#FF3300","short-term":"#FFBB33","long-term":"#4ADE80"}.get(sw.get("urgency","short-term"),"#FFBB33")
@@ -318,6 +320,7 @@ def render_so_what(sw):
       </div>
     </div>""", unsafe_allow_html=True)
 
+# ── Header ────────────────────────────────────────────────────────────────────
 def render_header():
     st.markdown("""<div class="brand-header">
       <p class="brand-title">Analytic<span>Dash</span><span style="color:#FF5C00">AI</span></p>
@@ -326,9 +329,15 @@ def render_header():
     b = st.session_state
     def badge(l, d): return f'<span class="{"badge done" if d else "badge"}">{"&#10003;" if d else "&#9675;"} {l}</span>'
     cost = f'<span class="cost-pill">&#36;{b.session_cost:.4f}</span>' if b.session_cost > 0 else ""
-    big  = '<span class="warn-box" style="display:inline;padding:.15rem .5rem;border-radius:4px;font-size:.7rem">&#9888; Large dataset</span>' if b.large_dataset else ""
+    # Show row count in header for large datasets
+    if b.large_dataset and b.dataset_rows > 0:
+        rows_fmt = f"{b.dataset_rows/1_000_000:.1f}M" if b.dataset_rows >= 1_000_000 else f"{b.dataset_rows:,}"
+        big = f'<span class="cost-pill" style="background:#1A1000;border-color:#FFBB33;color:#FFE0A0">&#128202; {rows_fmt} rows — smart sampling ON</span>'
+    else:
+        big = ""
     st.markdown(f"""<div class="progress-bar">{badge("Question Set",b.question_set)}{badge("Data Loaded",b.data_loaded)}{badge("Analysed",b.analysed)}{badge("Data Cleaned",b.data_cleaned)} {cost} {big}</div>""", unsafe_allow_html=True)
 
+# ── Setup Tab ─────────────────────────────────────────────────────────────────
 QUESTION_PROMPTS = [
     "Why is customer churn increasing?", "Which products are most profitable by region?",
     "What's driving revenue growth this quarter?", "Which customer segments have the highest lifetime value?",
@@ -346,7 +355,6 @@ def tab_setup():
                 st.session_state.question_set = True
                 st.rerun()
 
-    # FIX 1: Show green confirmation card so user knows click registered
     if st.session_state.business_question:
         st.markdown(f"""<div style="background:#0C2010;border:1px solid #1A5C2A;border-left:4px solid #4ADE80;
             border-radius:8px;padding:.6rem 1rem;margin:.75rem 0;">
@@ -382,11 +390,24 @@ def tab_setup():
                 st.session_state.filename = uploaded.name; st.session_state.data_loaded = True
                 st.session_state.data_cleaned = True; st.session_state.analysed = False
                 st.session_state.large_dataset = is_large(df)
-            # FIX 1b: Use st.warning instead of st.markdown to avoid DeltaGenerator render error
+                st.session_state.dataset_rows  = len(df)
+                st.session_state.dataset_cols  = len(df.columns)
             mb = uploaded.size / (1024 * 1024) if hasattr(uploaded, 'size') else 0
-            st.success(f"Loaded **{uploaded.name}** — {df.shape[0]:,} rows x {df.shape[1]} columns ({mb:.1f} MB)")
+            rows_fmt = f"{len(df)/1_000_000:.2f}M" if len(df) >= 1_000_000 else f"{len(df):,}"
+            st.success(f"✅ Loaded **{uploaded.name}** — {rows_fmt} rows × {len(df.columns)} columns ({mb:.1f} MB)")
+
+            # Friendly large dataset info box — not alarming
             if is_large(df):
-                st.warning(f"⚠ Large dataset ({df.shape[0]:,} rows). AI analysis uses a {MAX_SAMPLE_ROWS}-row sample to stay fast and cost-efficient.")
+                st.markdown(f"""
+                <div class="ok-box">
+                  <strong>&#128202; Large dataset ready!</strong> ({rows_fmt} rows)<br>
+                  AnalyticDashAI handles this automatically:<br>
+                  &nbsp;&nbsp;&#10003; AI analysis uses a representative {MAX_SAMPLE_ROWS:,}-row statistical sample<br>
+                  &nbsp;&nbsp;&#10003; Charts render up to {MAX_PLOT_ROWS:,} rows for full visual detail<br>
+                  &nbsp;&nbsp;&#10003; Anomaly detection scans up to {MAX_ANOMALY_ROWS:,} rows<br>
+                  &nbsp;&nbsp;&#10003; All column statistics are computed on the <strong>full dataset</strong><br>
+                  Everything works — just faster and cheaper than processing all {rows_fmt} rows with AI.
+                </div>""", unsafe_allow_html=True)
         except Exception as e: st.error(f"Error reading file: {e}")
 
     st.markdown("---")
@@ -396,6 +417,7 @@ def tab_setup():
         st.session_state.df = df; st.session_state.df_clean = df.copy()
         st.session_state.filename = "sample_sales_data.csv"; st.session_state.data_loaded = True
         st.session_state.data_cleaned = True; st.session_state.large_dataset = False
+        st.session_state.dataset_rows = len(df); st.session_state.dataset_cols = len(df.columns)
         if not st.session_state.business_question:
             st.session_state.business_question = "What's driving revenue growth this quarter?"
             st.session_state.question_set = True
@@ -410,6 +432,7 @@ def tab_setup():
         m3.metric("Numeric cols", str(len(df.select_dtypes(include=[np.number]).columns)))
         m4.metric("Missing values", f"{df.isnull().sum().sum():,}")
 
+# ── Analyse Tab ───────────────────────────────────────────────────────────────
 def tab_analyse():
     if st.session_state.df is None: st.info("Upload data in the **Setup** tab first."); return
     df = st.session_state.df_clean
@@ -418,8 +441,10 @@ def tab_analyse():
     st.markdown('<div class="step-label">STEP 2 — AI DATA ANALYST</div>', unsafe_allow_html=True)
     st.markdown("## AI Data Analyst")
     st.markdown("Data Profiling &nbsp;&middot;&nbsp; Issue Detection &nbsp;&middot;&nbsp; Intelligent Model Routing &nbsp;&middot;&nbsp; Business Insights")
+
     if is_large(df):
-        st.markdown(f'<div class="warn-box">&#9888; Large dataset ({rows:,} rows) — using {MAX_SAMPLE_ROWS}-row sample for AI prompts.</div>', unsafe_allow_html=True)
+        rows_fmt = f"{rows/1_000_000:.2f}M" if rows >= 1_000_000 else f"{rows:,}"
+        st.markdown(f'<div class="ok-box">&#128202; <strong>Large dataset mode</strong> ({rows_fmt} rows) — AI uses a {MAX_SAMPLE_ROWS:,}-row sample for prompts. Charts use up to {MAX_PLOT_ROWS:,} rows. Full statistics computed on all data.</div>', unsafe_allow_html=True)
 
     if st.button("Run AI Analyst", key="run_analyst"):
         with st.spinner("Running analysis with intelligent model routing..."):
@@ -476,7 +501,6 @@ Return at least 4 key_insights and 5 suggested_charts."""
         issues = dq.get("issues", [])
         if issues: st.markdown("**Issues found:**"); [st.markdown(f"- {i}") for i in issues]
 
-    # FIX 2: Show actionable data quality fix guidance
     recs = dq.get("recommendations", [])
     if recs:
         with st.expander("&#128295; How to fix these issues", expanded=(score < 70)):
@@ -491,7 +515,6 @@ Return at least 4 key_insights and 5 suggested_charts."""
         for i, ins in enumerate(insights[:4]):
             with ic[i]: st.metric(ins.get("title",""), ins.get("metric","—")); st.caption(ins.get("insight",""))
 
-    # FIX 3+4: validate columns + unique keys + diverse colors
     charts = st.session_state.charts
     if charts:
         st.markdown("### &#128200; AI-Generated Charts")
@@ -524,6 +547,7 @@ Return at least 4 key_insights and 5 suggested_charts."""
             col = {"High":"#FF5C00","Medium":"#FFBB33","Low":"#4ADE80"}.get(impact,"#888")
             st.markdown(f'<div class="info-card"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.4rem"><h4 style="margin:0">{rec.get("action","")}</h4><span style="font-size:.75rem;color:{col};font-weight:700">{impact} IMPACT &middot; {rec.get("timeline","")}</span></div><p>{rec.get("detail","")}</p></div>', unsafe_allow_html=True)
 
+# ── Explore Tab ───────────────────────────────────────────────────────────────
 def tab_explore():
     if st.session_state.df is None: st.info("Upload data in the **Setup** tab first."); return
     df = st.session_state.df_clean; rows = len(df)
@@ -576,7 +600,6 @@ ROLE_TEMPLATES = {
     "Finance":   "P&L summary, revenue vs cost, margin analysis, cash flow trend, budget vs actual",
     "Customer":  "Satisfaction scores, churn rate, LTV segments, support tickets, NPS trend"}
 
-# FIX 5: Each role gets distinct chart types — not all bar charts
 ROLE_CHART_TYPES = {
     "Executive": ["bar","line","donut","scatter","area","treemap"],
     "Sales":     ["bar","funnel","line","donut","scatter","histogram"],
@@ -597,7 +620,6 @@ def tab_dashboard():
     st.markdown("## Generate Custom Dashboard")
     st.markdown("Click a role to **instantly generate** a tailored dashboard, or describe your own below.")
 
-    # FIX 3: Role buttons instantly generate charts with role-specific chart types
     rc = st.columns(len(ROLE_TEMPLATES))
     for i, (role, focus) in enumerate(ROLE_TEMPLATES.items()):
         with rc[i]:
@@ -624,7 +646,6 @@ def tab_dashboard():
                 st.session_state.dashboard_charts = valid
                 st.rerun()
 
-    # Show which role is active
     active = st.session_state.get("active_role", "")
     if active:
         st.markdown(f'<div style="background:#0C2010;border:1px solid #1A5C2A;border-left:4px solid #4ADE80;border-radius:8px;padding:.5rem 1rem;margin:.5rem 0;font-size:.85rem;color:#4ADE80">&#10003; <strong>{active}</strong> dashboard active — scroll down to see your charts</div>', unsafe_allow_html=True)
@@ -713,6 +734,7 @@ Only use these exact column names: {list(df.columns)}"""
                   "session_cost_usd":round(st.session_state.session_cost, 4)}
             st.download_button("Download AI Summary", json.dumps(ed, indent=2), "analyticdashai_summary.json", "application/json", use_container_width=True)
 
+# ── Monitor Tab ───────────────────────────────────────────────────────────────
 def tab_monitor():
     if st.session_state.df is None: st.info("Upload data in the **Setup** tab first."); return
     df = st.session_state.df_clean
@@ -780,6 +802,7 @@ def tab_monitor():
     elif st.session_state.analysed:
         st.markdown('<div class="info-card" style="border-color:#1A5C2A"><h4 style="color:#4ADE80">&#10003; No anomalies detected</h4><p>Your data looks clean.</p></div>', unsafe_allow_html=True)
 
+# ── Main ──────────────────────────────────────────────────────────────────────
 def main():
     render_header()
     t1,t2,t3,t4,t5 = st.tabs(["&#128203; 1 &middot; Setup","&#128300; 2 &middot; Analyse","&#128269; 3 &middot; Explore","&#128202; 4 &middot; Dashboard","&#128225; 5 &middot; Monitor"])
