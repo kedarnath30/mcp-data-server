@@ -451,8 +451,12 @@ def _setup_uploader():
     uploaded = st.file_uploader("CSV or Excel (up to 200MB)", type=["csv","xlsx","xls"],
                                 key="file_upload", label_visibility="collapsed")
     if uploaded:
+        # Only reload if filename changed — prevents blinking on every rerun
+        if st.session_state.get("filename") == uploaded.name and st.session_state.df is not None:
+            return  # already loaded this file — skip
         try:
-            with st.spinner("Loading and cleaning data..."):
+            df = None
+            with st.spinner(f"Loading {uploaded.name}... please wait"):
                 if uploaded.name.endswith(".csv"):
                     try: df = pd.read_csv(uploaded)
                     except Exception: uploaded.seek(0); df = pd.read_csv(uploaded, encoding="latin-1")
@@ -461,18 +465,32 @@ def _setup_uploader():
                     sheet = st.selectbox("Select sheet:", xl.sheet_names, key="sheet_sel") if len(xl.sheet_names) > 1 else xl.sheet_names[0]
                     df = pd.read_excel(uploaded, sheet_name=sheet)
                 df = auto_clean(df)
-                st.session_state.df = df; st.session_state.df_clean = df.copy()
-                st.session_state.filename = uploaded.name; st.session_state.data_loaded = True
-                st.session_state.data_cleaned = True; st.session_state.analysed = False
+
+            if df is not None:
+                # Write ALL session state atomically AFTER spinner completes
+                df_clean = df.copy()
+                st.session_state.df           = df
+                st.session_state.df_clean     = df_clean
+                st.session_state.filename     = uploaded.name
+                st.session_state.data_loaded  = True
+                st.session_state.data_cleaned = True
+                st.session_state.analysed     = False
                 st.session_state.large_dataset = is_large(df)
-                st.session_state.dataset_rows = len(df); st.session_state.dataset_cols = len(df.columns)
-            mb = uploaded.size / (1024*1024) if hasattr(uploaded, 'size') else 0
-            rows_fmt = f"{len(df)/1_000_000:.2f}M" if len(df) >= 1_000_000 else f"{len(df):,}"
-            st.success(f"✅ Loaded **{uploaded.name}** — {rows_fmt} rows × {len(df.columns)} columns ({mb:.1f} MB)")
-            if is_large(df):
-                st.info(f"📊 Large dataset — AI uses {MAX_SAMPLE_ROWS:,}-row sample. Charts up to {MAX_PLOT_ROWS:,} rows.")
-            st.session_state["_show_upload"] = False  # close panel after successful load
-            st.rerun()
+                st.session_state.dataset_rows  = len(df)
+                st.session_state.dataset_cols  = len(df.columns)
+                st.session_state["_show_upload"] = False
+                st.session_state.analysis_result = None
+                st.session_state.recommendations = None
+                st.session_state.so_what         = None
+                st.session_state.charts          = []
+                st.session_state.dashboard_charts = []
+
+                mb = uploaded.size / (1024*1024) if hasattr(uploaded, "size") else 0
+                rows_fmt = f"{len(df)/1_000_000:.2f}M" if len(df) >= 1_000_000 else f"{len(df):,}"
+                st.success(f"✅ Loaded **{uploaded.name}** — {rows_fmt} rows × {len(df.columns)} columns ({mb:.1f} MB)")
+                if is_large(df):
+                    st.info(f"📊 Large dataset — AI uses {MAX_SAMPLE_ROWS:,}-row sample. Charts up to {MAX_PLOT_ROWS:,} rows.")
+                st.rerun()
         except Exception as e: st.error(f"Error reading file: {e}")
 
 
@@ -555,7 +573,11 @@ def _setup_workspace():
 
 # ── Analyse Tab ───────────────────────────────────────────────────────────────
 def tab_analyse():
-    if st.session_state.df is None: st.info("Upload data in the **Setup** tab first."); return
+    if not st.session_state.data_loaded or st.session_state.df is None:
+        st.info("Upload data in the **Setup** tab first."); return
+    # Ensure df_clean is always available
+    if st.session_state.df_clean is None:
+        st.session_state.df_clean = st.session_state.df.copy()
     df = st.session_state.df_clean
     question = st.session_state.business_question or "General analysis"
     rows = len(df)
@@ -670,7 +692,10 @@ Return at least 4 key_insights and 5 suggested_charts."""
 
 # ── Explore Tab ───────────────────────────────────────────────────────────────
 def tab_explore():
-    if st.session_state.df is None: st.info("Upload data in the **Setup** tab first."); return
+    if not st.session_state.data_loaded or st.session_state.df is None:
+        st.info("Upload data in the **Setup** tab first."); return
+    if st.session_state.df_clean is None:
+        st.session_state.df_clean = st.session_state.df.copy()
     df = st.session_state.df_clean; rows = len(df)
     st.markdown('<div class="step-label">STEP 4 — NATURAL LANGUAGE QUERY</div>', unsafe_allow_html=True)
     st.markdown("## Ask Questions")
@@ -730,7 +755,10 @@ ROLE_CHART_TYPES = {
     "Customer":  ["line","donut","bar","scatter","histogram","box"]}
 
 def tab_dashboard():
-    if st.session_state.df is None: st.info("Upload data in the **Setup** tab first."); return
+    if not st.session_state.data_loaded or st.session_state.df is None:
+        st.info("Upload data in the **Setup** tab first."); return
+    if st.session_state.df_clean is None:
+        st.session_state.df_clean = st.session_state.df.copy()
     df = st.session_state.df_clean
     question = st.session_state.business_question or "General analysis"
     rows = len(df)
@@ -845,7 +873,10 @@ Only use these exact column names: {list(df.columns)}"""
 
 # ── Monitor Tab ───────────────────────────────────────────────────────────────
 def tab_monitor():
-    if st.session_state.df is None: st.info("Upload data in the **Setup** tab first."); return
+    if not st.session_state.data_loaded or st.session_state.df is None:
+        st.info("Upload data in the **Setup** tab first."); return
+    if st.session_state.df_clean is None:
+        st.session_state.df_clean = st.session_state.df.copy()
     df = st.session_state.df_clean
     st.markdown('<div class="step-label">STEP 8 — MONITOR & ITERATE</div>', unsafe_allow_html=True)
     st.markdown("## Monitor & Iterate")
