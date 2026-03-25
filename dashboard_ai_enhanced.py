@@ -83,7 +83,6 @@ _SP = [r'\b(count|sum|average|mean|min|max|list|show|display|get|how many|total)
 _CP = [r'\b(why|explain|analyze|analyse|interpret|recommend|predict|strategy|correlation|forecast|trend|insight|impact|cause|reason)\b']
 _KP = [r'\b(executive summary|final report|decision|board|stakeholder|investor|ceo|cfo)\b']
 
-# ── Model Router ──────────────────────────────────────────────────────────────
 def _complexity(task, rows=0):
     t = task.lower()
     for p in _KP:
@@ -111,7 +110,6 @@ def mbadge(model):
     if "opus"   in model: return '<span class="router-badge"><span class="opus-color">&#128293; Opus</span></span>'
     return ""
 
-# ── Client ────────────────────────────────────────────────────────────────────
 @st.cache_resource
 def get_client():
     key = os.environ.get("ANTHROPIC_API_KEY", "")
@@ -140,7 +138,6 @@ def init_state():
 init_state()
 client = get_client()
 
-# ── Core Helpers ──────────────────────────────────────────────────────────────
 def is_large(df): return len(df) > MAX_ROWS_FULL
 def sdf(df, n=MAX_SAMPLE_ROWS): return df if len(df) <= n else df.sample(n=n, random_state=42)
 
@@ -279,7 +276,6 @@ def get_sample_data():
     df["Month"]  = df["Date"].dt.strftime("%b %Y")
     return df
 
-# ── So What Renderer ──────────────────────────────────────────────────────────
 def render_so_what(sw):
     if not sw or not isinstance(sw, dict): return
     uc  = {"immediate":"#FF3300","short-term":"#FFBB33","long-term":"#4ADE80"}.get(sw.get("urgency","short-term"),"#FFBB33")
@@ -307,7 +303,6 @@ def render_so_what(sw):
       </div>
     </div>""", unsafe_allow_html=True)
 
-# ── Header ────────────────────────────────────────────────────────────────────
 def render_header():
     b = st.session_state
     def badge(l, d): return f'<span class="{"badge done" if d else "badge"}">{"&#10003;" if d else "&#9675;"} {l}</span>'
@@ -344,12 +339,10 @@ QUESTION_PROMPTS = [
 ]
 
 def tab_setup():
-    # Once data is loaded → show compact workspace
     if st.session_state.data_loaded and st.session_state.df is not None:
         _setup_workspace()
         return
 
-    # ── Hero ────────────────────────────────────────────────
     st.markdown("""
     <div style="text-align:center;padding:2.5rem 1rem 1.5rem">
       <div style="display:inline-block;background:#1A0E00;border:1px solid #FF5C00;border-radius:999px;
@@ -370,7 +363,6 @@ def tab_setup():
     </div>
     """, unsafe_allow_html=True)
 
-    # ── CTA Buttons ─────────────────────────────────────────
     _, mid, _ = st.columns([1, 2, 1])
     with mid:
         b1, b2 = st.columns(2)
@@ -385,13 +377,13 @@ def tab_setup():
                 if not st.session_state.business_question:
                     st.session_state.business_question = "What's driving revenue growth this quarter?"
                     st.session_state.question_set = True
+                st.session_state["_show_upload"] = False
                 st.rerun()
         with b2:
             if st.button("↑  Upload Your Data", key="hero_upload", use_container_width=True):
                 st.session_state["_show_upload"] = True
                 st.rerun()
 
-    # ── Features ────────────────────────────────────────────
     st.markdown("<br>", unsafe_allow_html=True)
     st.markdown("""<p style="text-align:center;font-family:'Space Grotesk',sans-serif;font-size:.7rem;
       font-weight:700;color:#6B6B6B;letter-spacing:1px;text-transform:uppercase;margin-bottom:1.25rem">
@@ -418,7 +410,6 @@ def tab_setup():
               <p style="margin:0;color:#6B6B6B;font-size:.78rem;line-height:1.5">{desc}</p>
             </div>""", unsafe_allow_html=True)
 
-    # ── Steps ───────────────────────────────────────────────
     st.markdown("<br>", unsafe_allow_html=True)
     st.markdown("""<p style="text-align:center;font-family:'Space Grotesk',sans-serif;font-size:.7rem;
       font-weight:700;color:#6B6B6B;letter-spacing:1px;text-transform:uppercase;margin-bottom:1.25rem">
@@ -443,7 +434,7 @@ def tab_setup():
               <p style="margin:.15rem 0 0;font-size:.7rem;color:#6B6B6B">{desc}</p>
             </div>""", unsafe_allow_html=True)
 
-    # ── Upload panel (shows when Upload button clicked) ─────
+    # Upload panel — only visible after clicking Upload button
     if st.session_state.get("_show_upload", False):
         st.markdown("<br>", unsafe_allow_html=True)
         st.markdown("""
@@ -480,6 +471,7 @@ def _setup_uploader():
             st.success(f"✅ Loaded **{uploaded.name}** — {rows_fmt} rows × {len(df.columns)} columns ({mb:.1f} MB)")
             if is_large(df):
                 st.info(f"📊 Large dataset — AI uses {MAX_SAMPLE_ROWS:,}-row sample. Charts up to {MAX_PLOT_ROWS:,} rows.")
+            st.session_state["_show_upload"] = False  # close panel after successful load
             st.rerun()
         except Exception as e: st.error(f"Error reading file: {e}")
 
@@ -488,7 +480,6 @@ def _setup_workspace():
     """Compact workspace shown after data is loaded."""
     df = st.session_state.df
 
-    # Question picker / display
     if not st.session_state.business_question:
         st.markdown("""<p style="font-family:'Space Grotesk',sans-serif;font-size:.72rem;font-weight:700;
           color:#FF5C00;text-transform:uppercase;letter-spacing:.5px;margin:.5rem 0 .75rem">
@@ -522,7 +513,6 @@ def _setup_workspace():
                 st.session_state.question_set = False
                 st.rerun()
 
-    # Dataset stats bar
     rows_fmt = f"{df.shape[0]/1_000_000:.2f}M" if df.shape[0] >= 1_000_000 else f"{df.shape[0]:,}"
     nc  = len(df.select_dtypes(include=[np.number]).columns)
     nul = df.isnull().sum().sum()
@@ -549,7 +539,6 @@ def _setup_workspace():
     with st.expander("Upload a different file"):
         _setup_uploader()
 
-    # Ready CTA
     if st.session_state.business_question:
         st.markdown("""
         <div style="background:linear-gradient(135deg,#1A0E00,#1E1000);border:1px solid #FF5C00;
