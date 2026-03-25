@@ -1,6 +1,6 @@
 """
 AnalyticDashAI — Upload data. Ask anything. See everything.
-V7: Intelligent Model Routing + Enhanced So What? + Large Dataset Support + Bug Fixes
+V7: Intelligent Model Routing + Enhanced So What? + Large Dataset Support + Hero Landing UX
 """
 
 import streamlit as st
@@ -24,11 +24,6 @@ st.markdown("""
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap');
   html,body,[class*="css"]{font-family:'Plus Jakarta Sans',sans-serif!important;background-color:#0C0C0C;color:#FFF}
-  .brand-header{padding:1.5rem 0 0.5rem;border-bottom:1px solid #1E1E1E;margin-bottom:1rem}
-  .brand-title{font-family:'Space Grotesk',sans-serif;font-size:2rem;font-weight:800;color:#FFF;margin:0;letter-spacing:-.5px}
-  .brand-title span{color:#FF5C00}
-  .brand-subtitle{font-size:.85rem;color:#6B6B6B;margin:.2rem 0 0;font-family:'Space Grotesk',sans-serif}
-  .progress-bar{display:flex;gap:.5rem;flex-wrap:wrap;margin:.75rem 0}
   .badge{padding:.3rem .75rem;border-radius:999px;font-size:.72rem;font-weight:600;font-family:'Space Grotesk',sans-serif;border:1px solid #2E2E2E;background:#1E1E1E;color:#6B6B6B}
   .badge.done{background:#0C2010;border-color:#1A5C2A;color:#4ADE80}
   .step-label{display:inline-block;background:#1E1E1E;color:#FF5C00;font-family:'Space Grotesk',sans-serif;font-size:.72rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:.3rem .8rem;border-radius:4px;border-left:3px solid #FF5C00;margin-bottom:.5rem}
@@ -43,6 +38,8 @@ st.markdown("""
   .cost-pill{background:#0C2010;border:1px solid #1A5C2A;border-radius:999px;padding:.15rem .6rem;font-size:.7rem;color:#4ADE80;font-family:'Space Grotesk',sans-serif;font-weight:700}
   .stButton>button{background:#1E1E1E!important;color:#FFF!important;border:1px solid #2E2E2E!important;border-radius:8px!important;font-size:.85rem!important;transition:all .2s!important}
   .stButton>button:hover{border-color:#FF5C00!important;color:#FF5C00!important;background:#1A0E00!important}
+  .stButton>button[kind="primary"]{background:#FF5C00!important;border-color:#FF5C00!important;color:#FFF!important}
+  .stButton>button[kind="primary"]:hover{background:#E05000!important;border-color:#E05000!important}
   .stTabs [data-baseweb="tab-list"]{background:#1E1E1E;border-radius:10px;padding:4px;gap:2px}
   .stTabs [data-baseweb="tab"]{color:#6B6B6B!important;font-family:'Space Grotesk',sans-serif!important;font-weight:600!important;font-size:.85rem!important;border-radius:8px!important;padding:.5rem 1rem!important}
   .stTabs [aria-selected="true"]{background:#FF5C00!important;color:#FFF!important}
@@ -52,33 +49,30 @@ st.markdown("""
   .stSelectbox>div>div{background:#1E1E1E!important;border-color:#2E2E2E!important;color:#FFF!important}
   .streamlit-expanderHeader{background:#1E1E1E!important;border-radius:8px!important;color:#FFF!important}
   [data-testid="stFileUploader"]{background:#1E1E1E;border:2px dashed #2E2E2E;border-radius:10px}
-  .pro-tip{background:#111;border-left:3px solid #FF5C00;padding:.5rem .9rem;border-radius:0 6px 6px 0;font-size:.82rem;color:#8B8B8B;margin:.5rem 0}
-  .pro-tip span{color:#FF5C00;font-weight:700}
   #MainMenu,footer,header{visibility:hidden}
-  .block-container{padding-top:1rem!important;max-width:1200px}
+  .block-container{padding-top:.5rem!important;max-width:1200px}
 </style>
 """, unsafe_allow_html=True)
 
-# ── Diverse Color Palettes ────────────────────────────────────────────────────
+# ── Color Palettes ─────────────────────────────────────────────────────────────
 CHART_PALETTES = [
-    ["#FF5C00","#FF8C42","#FFB347","#FFC87A","#FFE0A0"],  # orange (brand)
-    ["#4ADE80","#22C55E","#16A34A","#86EFAC","#BBF7D0"],  # green
-    ["#60A5FA","#3B82F6","#2563EB","#93C5FD","#BFDBFE"],  # blue
-    ["#F472B6","#EC4899","#DB2777","#FBCFE8","#FCE7F3"],  # pink
-    ["#A78BFA","#8B5CF6","#7C3AED","#C4B5FD","#DDD6FE"],  # purple
-    ["#34D399","#10B981","#059669","#6EE7B7","#A7F3D0"],  # teal
+    ["#FF5C00","#FF8C42","#FFB347","#FFC87A","#FFE0A0"],
+    ["#4ADE80","#22C55E","#16A34A","#86EFAC","#BBF7D0"],
+    ["#60A5FA","#3B82F6","#2563EB","#93C5FD","#BFDBFE"],
+    ["#F472B6","#EC4899","#DB2777","#FBCFE8","#FCE7F3"],
+    ["#A78BFA","#8B5CF6","#7C3AED","#C4B5FD","#DDD6FE"],
+    ["#34D399","#10B981","#059669","#6EE7B7","#A7F3D0"],
 ]
 CHART_SINGLE = ["#FF5C00","#4ADE80","#60A5FA","#F472B6","#A78BFA","#34D399","#FFBB33","#FB923C"]
-
 def get_palette(idx=0): return CHART_PALETTES[idx % len(CHART_PALETTES)]
 def get_color(idx=0):   return CHART_SINGLE[idx % len(CHART_SINGLE)]
 
 # ── Constants ─────────────────────────────────────────────────────────────────
-MAX_ROWS_FULL   = 50_000   # above this = large dataset mode
-MAX_SAMPLE_ROWS = 2_000    # rows sent to Claude AI prompts (increased from 500)
-MAX_PLOT_ROWS   = 10_000   # rows used for chart rendering
-MAX_ANOMALY_ROWS= 10_000   # rows used for anomaly detection
-MAX_COLS_DESC   = 20       # max numeric cols in describe()
+MAX_ROWS_FULL    = 50_000
+MAX_SAMPLE_ROWS  = 2_000
+MAX_PLOT_ROWS    = 10_000
+MAX_ANOMALY_ROWS = 10_000
+MAX_COLS_DESC    = 20
 
 MODEL_PRICING = {
     "claude-haiku-4-5":  {"input": 0.80,  "output": 4.00},
@@ -138,7 +132,7 @@ def init_state():
         "question_set":False, "data_loaded":False, "analysed":False, "data_cleaned":False,
         "session_cost":0.0, "session_tokens":0, "model_calls":{"haiku":0,"sonnet":0,"opus":0},
         "large_dataset":False, "dataset_rows":0, "dataset_cols":0,
-        "active_role":"", "dashboard_desc":"",
+        "active_role":"", "dashboard_desc":"", "_show_upload":False,
     }
     for k, v in D.items():
         if k not in st.session_state: st.session_state[k] = v
@@ -146,15 +140,15 @@ def init_state():
 init_state()
 client = get_client()
 
-# ── Helpers ───────────────────────────────────────────────────────────────────
+# ── Core Helpers ──────────────────────────────────────────────────────────────
 def is_large(df): return len(df) > MAX_ROWS_FULL
 def sdf(df, n=MAX_SAMPLE_ROWS): return df if len(df) <= n else df.sample(n=n, random_state=42)
 
 def df_summary(df, max_rows=5):
-    ds = sdf(df, max(max_rows * 10, MAX_SAMPLE_ROWS)) if is_large(df) else df
+    ds = sdf(df, max(max_rows*10, MAX_SAMPLE_ROWS)) if is_large(df) else df
     b = io.StringIO()
     b.write(f"Shape: {df.shape[0]:,} rows x {df.shape[1]} columns")
-    b.write(f" (analysis based on {len(ds):,}-row sample)\n" if is_large(df) else "\n")
+    b.write(f" (sample of {len(ds):,})\n" if is_large(df) else "\n")
     b.write(f"Columns: {list(df.columns)}\n")
     b.write(f"Dtypes:\n{df.dtypes.to_string()}\n")
     b.write(f"Sample:\n{ds.head(max_rows).to_string()}\n")
@@ -215,11 +209,10 @@ def build_chart(df, ctype, x, y, color=None, title="", color_idx=0):
         if y and y in dp.columns: dp[y] = snum(dp[y]); dp = dp.dropna(subset=[y])
         if x and x in dp.columns: dp = dp.dropna(subset=[x])
         if len(dp) == 0: st.warning(f"No data to plot: {title}"); return None
-        vc      = color if color and color in dp.columns else None
-        palette = get_palette(color_idx)
-        single  = get_color(color_idx)
-        kw      = dict(x=x, y=y, title=title, color=vc, color_discrete_sequence=palette)
-        ct      = ctype.lower()
+        vc = color if color and color in dp.columns else None
+        palette = get_palette(color_idx); single = get_color(color_idx)
+        kw = dict(x=x, y=y, title=title, color=vc, color_discrete_sequence=palette)
+        ct = ctype.lower()
         if ct == "bar":
             if len(dp) > 500:
                 da = dp.groupby(x, as_index=False)[y].mean()
@@ -242,8 +235,7 @@ def build_chart(df, ctype, x, y, color=None, title="", color_idx=0):
                    if (vc and dp[x].nunique() <= 50 and dp[vc].nunique() <= 20)
                    else dp.select_dtypes(include=[np.number]).corr())
             fig = px.imshow(piv, title=title, color_continuous_scale="RdYlGn")
-        elif ct == "funnel":
-            fig = px.funnel(dp, x=y, y=x, title=title, color_discrete_sequence=palette)
+        elif ct == "funnel":    fig = px.funnel(dp, x=y, y=x, title=title, color_discrete_sequence=palette)
         elif ct == "treemap":
             da = dp.groupby(x, as_index=False)[y].sum(); da = da[da[y] > 0]
             fig = px.treemap(da, path=[x], values=y, title=title, color_discrete_sequence=px.colors.qualitative.Bold)
@@ -255,8 +247,7 @@ def build_chart(df, ctype, x, y, color=None, title="", color_idx=0):
             fig = px.scatter(dp, x=x, y=y, size=sc, title=title, color_discrete_sequence=[single])
         elif ct == "waterfall":
             dw = dp.groupby(x, as_index=False)[y].sum()
-            fig = go.Figure(go.Waterfall(x=dw[x].astype(str).tolist(), y=dw[y].tolist(),
-                                         connector={"line":{"color":single}}))
+            fig = go.Figure(go.Waterfall(x=dw[x].astype(str).tolist(), y=dw[y].tolist(), connector={"line":{"color":single}}))
             fig.update_layout(title=title)
         else: fig = px.bar(dp, **kw)
         fig.update_layout(
@@ -294,8 +285,7 @@ def render_so_what(sw):
     uc  = {"immediate":"#FF3300","short-term":"#FFBB33","long-term":"#4ADE80"}.get(sw.get("urgency","short-term"),"#FFBB33")
     c   = sw.get("confidence", 0)
     cp  = f"{int(float(c)*100)}%" if float(c) <= 1 else f"{int(float(c))}%"
-    ah  = "".join(f'<li style="margin-bottom:.3rem;color:#D0D0D0;font-size:.88rem">{a}</li>'
-                  for a in sw.get("action_items", []))
+    ah  = "".join(f'<li style="margin-bottom:.3rem;color:#D0D0D0;font-size:.88rem">{a}</li>' for a in sw.get("action_items", []))
     sh  = ", ".join(sw.get("stakeholders", []))
     fi  = sw.get("financial_impact") or ""
     ls  = "display:block;color:#FF5C00;font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin:.8rem 0 .25rem;font-family:sans-serif"
@@ -303,16 +293,13 @@ def render_so_what(sw):
     st.markdown(f"""
     <div style="background:linear-gradient(135deg,#1A1200,#1E1000);border:1px solid #FF5C00;
                 border-left:4px solid #FF5C00;border-radius:10px;padding:1.25rem 1.5rem;margin:1rem 0">
-      <div style="color:#FF5C00;font-size:.75rem;font-weight:700;letter-spacing:1px;
-                  text-transform:uppercase;margin:0 0 .6rem;font-family:sans-serif">
+      <div style="color:#FF5C00;font-size:.75rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin:0 0 .6rem;font-family:sans-serif">
         &#127919; SO WHAT? — AI EXECUTIVE SUMMARY
       </div>
       <p style="color:#FFF;font-size:.95rem;font-weight:600;margin:0 0 .5rem">{sw.get("insight_summary","")}</p>
-      <span style="{ls}">Business Impact</span>
-      <p style="{ps}">{sw.get("business_impact","")}</p>
+      <span style="{ls}">Business Impact</span><p style="{ps}">{sw.get("business_impact","")}</p>
       {"<span style='"+ls+"'>Financial Impact</span><p style='"+ps+"'>"+fi+"</p>" if fi else ""}
-      <span style="{ls}">Action Items</span>
-      <ul style="margin:.3rem 0 0;padding-left:1.2rem">{ah}</ul>
+      <span style="{ls}">Action Items</span><ul style="margin:.3rem 0 0;padding-left:1.2rem">{ah}</ul>
       {"<span style='"+ls+"'>Stakeholders</span><p style='"+ps+"'>"+sh+"</p>" if sh else ""}
       <div style="display:flex;gap:1.5rem;margin-top:.8rem;font-size:.78rem;color:#6B6B6B;font-family:sans-serif">
         <span>URGENCY: <strong style="color:{uc}">{sw.get("urgency","short-term").upper()}</strong></span>
@@ -322,59 +309,156 @@ def render_so_what(sw):
 
 # ── Header ────────────────────────────────────────────────────────────────────
 def render_header():
-    st.markdown("""<div class="brand-header">
-      <p class="brand-title">Analytic<span>Dash</span><span style="color:#FF5C00">AI</span></p>
-      <p class="brand-subtitle">AI Dashboard Builder &nbsp;&middot;&nbsp; Natural Language Queries &nbsp;&middot;&nbsp; Auto Data Cleaning &nbsp;&middot;&nbsp; Intelligent Model Routing</p>
-    </div>""", unsafe_allow_html=True)
     b = st.session_state
     def badge(l, d): return f'<span class="{"badge done" if d else "badge"}">{"&#10003;" if d else "&#9675;"} {l}</span>'
     cost = f'<span class="cost-pill">&#36;{b.session_cost:.4f}</span>' if b.session_cost > 0 else ""
-    # Show row count in header for large datasets
     if b.large_dataset and b.dataset_rows > 0:
         rows_fmt = f"{b.dataset_rows/1_000_000:.1f}M" if b.dataset_rows >= 1_000_000 else f"{b.dataset_rows:,}"
-        big = f'<span class="cost-pill" style="background:#1A1000;border-color:#FFBB33;color:#FFE0A0">&#128202; {rows_fmt} rows — smart sampling ON</span>'
+        big = f'<span class="cost-pill" style="background:#1A1000;border-color:#FFBB33;color:#FFE0A0">&#128202; {rows_fmt} rows</span>'
     else:
         big = ""
-    st.markdown(f"""<div class="progress-bar">{badge("Question Set",b.question_set)}{badge("Data Loaded",b.data_loaded)}{badge("Analysed",b.analysed)}{badge("Data Cleaned",b.data_cleaned)} {cost} {big}</div>""", unsafe_allow_html=True)
+    st.markdown(f"""
+    <div style="display:flex;align-items:center;justify-content:space-between;
+                padding:.6rem 0;border-bottom:1px solid #1E1E1E;margin-bottom:.5rem">
+      <div style="display:flex;align-items:center;gap:.6rem">
+        <div style="width:30px;height:30px;background:#FF5C00;border-radius:7px;
+                    display:flex;align-items:center;justify-content:center;font-size:.9rem">&#128202;</div>
+        <span style="font-family:'Space Grotesk',sans-serif;font-size:1.05rem;font-weight:800;color:#FFF">
+          Analytic<span style="color:#FF5C00">DashAI</span>
+        </span>
+      </div>
+      <div style="display:flex;gap:.4rem;flex-wrap:wrap;align-items:center">
+        {badge("Question",b.question_set)}{badge("Data",b.data_loaded)}{badge("Analysed",b.analysed)}
+        {cost} {big}
+      </div>
+    </div>""", unsafe_allow_html=True)
 
 # ── Setup Tab ─────────────────────────────────────────────────────────────────
 QUESTION_PROMPTS = [
-    "Why is customer churn increasing?", "Which products are most profitable by region?",
-    "What's driving revenue growth this quarter?", "Which customer segments have the highest lifetime value?",
-    "Where are we losing customers in the funnel?", "Which states/regions have the best performance?"]
+    "Why is customer churn increasing?",
+    "Which products are most profitable by region?",
+    "What's driving revenue growth this quarter?",
+    "Which customer segments have the highest lifetime value?",
+    "Where are we losing customers in the funnel?",
+    "Which states/regions have the best performance?",
+]
 
 def tab_setup():
-    st.markdown('<div class="step-label">STEP 1 — DEFINE YOUR QUESTION</div>', unsafe_allow_html=True)
-    st.markdown("## What are you trying to figure out?")
-    st.markdown("Start with a business question — AnalyticDashAI will tailor every analysis and dashboard to answer it.")
-    cols = st.columns(3)
-    for i, q in enumerate(QUESTION_PROMPTS):
-        with cols[i % 3]:
-            if st.button(q, key=f"q_{i}", use_container_width=True):
-                st.session_state.business_question = q
-                st.session_state.question_set = True
+    # Once data is loaded → show compact workspace
+    if st.session_state.data_loaded and st.session_state.df is not None:
+        _setup_workspace()
+        return
+
+    # ── Hero ────────────────────────────────────────────────
+    st.markdown("""
+    <div style="text-align:center;padding:2.5rem 1rem 1.5rem">
+      <div style="display:inline-block;background:#1A0E00;border:1px solid #FF5C00;border-radius:999px;
+                  padding:.3rem 1rem;font-size:.72rem;font-weight:700;color:#FF5C00;
+                  font-family:'Space Grotesk',sans-serif;letter-spacing:.5px;margin-bottom:1.25rem">
+        &#10024; AI-Powered Analytics
+      </div>
+      <h1 style="font-family:'Space Grotesk',sans-serif;font-size:2.6rem;font-weight:800;
+                 color:#FFF;line-height:1.15;margin:0 0 .75rem">
+        Upload data.<br>
+        <span style="color:#FF5C00">Ask anything.</span><br>
+        See everything.
+      </h1>
+      <p style="color:#8B8B8B;font-size:.95rem;max-width:460px;margin:0 auto;line-height:1.6">
+        Transform raw data into interactive dashboards using natural language.
+        No coding. No SQL. Just insights.
+      </p>
+    </div>
+    """, unsafe_allow_html=True)
+
+    # ── CTA Buttons ─────────────────────────────────────────
+    _, mid, _ = st.columns([1, 2, 1])
+    with mid:
+        b1, b2 = st.columns(2)
+        with b1:
+            if st.button("▶  Try Sample Data", key="hero_sample", use_container_width=True, type="primary"):
+                df = get_sample_data()
+                st.session_state.df = df; st.session_state.df_clean = df.copy()
+                st.session_state.filename = "sample_sales_data.csv"
+                st.session_state.data_loaded = True; st.session_state.data_cleaned = True
+                st.session_state.large_dataset = False
+                st.session_state.dataset_rows = len(df); st.session_state.dataset_cols = len(df.columns)
+                if not st.session_state.business_question:
+                    st.session_state.business_question = "What's driving revenue growth this quarter?"
+                    st.session_state.question_set = True
+                st.rerun()
+        with b2:
+            if st.button("↑  Upload Your Data", key="hero_upload", use_container_width=True):
+                st.session_state["_show_upload"] = True
                 st.rerun()
 
-    if st.session_state.business_question:
-        st.markdown(f"""<div style="background:#0C2010;border:1px solid #1A5C2A;border-left:4px solid #4ADE80;
-            border-radius:8px;padding:.6rem 1rem;margin:.75rem 0;">
-          <span style="font-size:.75rem;color:#4ADE80;font-weight:700;text-transform:uppercase;letter-spacing:.5px;">&#10003; Question Set</span>
-          <p style="margin:.2rem 0 0;color:#FFF;font-size:.92rem;">{st.session_state.business_question}</p>
+    # ── Features ────────────────────────────────────────────
+    st.markdown("<br>", unsafe_allow_html=True)
+    st.markdown("""<p style="text-align:center;font-family:'Space Grotesk',sans-serif;font-size:.7rem;
+      font-weight:700;color:#6B6B6B;letter-spacing:1px;text-transform:uppercase;margin-bottom:1.25rem">
+      Everything you need to understand your data</p>""", unsafe_allow_html=True)
+
+    features = [
+        ("&#9889;","Natural Language Queries","Ask questions in plain English. Get instant answers."),
+        ("&#128295;","Auto Data Cleaning","AI detects and fixes messy data automatically."),
+        ("&#128200;","40+ Chart Types","Bar, line, scatter, heatmap, funnel and more."),
+        ("&#128247;","Export Anywhere","One-click Excel and JSON exports."),
+        ("&#127919;","So What? Insights","Executive-ready business impact summaries."),
+        ("&#128301;","Anomaly Detection","See outliers and patterns as they emerge."),
+    ]
+    fc = st.columns(3)
+    for i, (icon, title, desc) in enumerate(features):
+        with fc[i % 3]:
+            st.markdown(f"""
+            <div style="background:#1E1E1E;border:1px solid #2E2E2E;border-radius:10px;
+                        padding:1rem 1.1rem;margin-bottom:.75rem">
+              <div style="width:34px;height:34px;background:#1A0E00;border:1px solid #FF5C00;
+                          border-radius:8px;display:flex;align-items:center;justify-content:center;
+                          font-size:1rem;margin-bottom:.6rem">{icon}</div>
+              <h4 style="margin:0 0 .25rem;color:#FFF;font-size:.88rem;font-weight:700">{title}</h4>
+              <p style="margin:0;color:#6B6B6B;font-size:.78rem;line-height:1.5">{desc}</p>
+            </div>""", unsafe_allow_html=True)
+
+    # ── Steps ───────────────────────────────────────────────
+    st.markdown("<br>", unsafe_allow_html=True)
+    st.markdown("""<p style="text-align:center;font-family:'Space Grotesk',sans-serif;font-size:.7rem;
+      font-weight:700;color:#6B6B6B;letter-spacing:1px;text-transform:uppercase;margin-bottom:1.25rem">
+      From data to insights in 5 simple steps</p>""", unsafe_allow_html=True)
+
+    steps = [("&#128203;","1. Setup","Define your question"),
+             ("&#128300;","2. Analyse","Upload & clean data"),
+             ("&#128269;","3. Explore","Query your data"),
+             ("&#128202;","4. Dashboard","Visualize insights"),
+             ("&#128225;","5. Monitor","Track progress")]
+    sc = st.columns(5)
+    for i, (icon, name, desc) in enumerate(steps):
+        with sc[i]:
+            active = i == 0
+            st.markdown(f"""
+            <div style="text-align:center;padding:.6rem .3rem">
+              <div style="width:42px;height:42px;background:{"#FF5C00" if active else "#1E1E1E"};
+                          border:1px solid {"#FF5C00" if active else "#2E2E2E"};border-radius:50%;
+                          display:flex;align-items:center;justify-content:center;
+                          font-size:1rem;margin:0 auto .4rem">{icon}</div>
+              <p style="margin:0;font-weight:700;font-size:.8rem;color:{"#FF5C00" if active else "#FFF"}">{name}</p>
+              <p style="margin:.15rem 0 0;font-size:.7rem;color:#6B6B6B">{desc}</p>
+            </div>""", unsafe_allow_html=True)
+
+    # ── Upload panel (shows when Upload button clicked) ─────
+    if st.session_state.get("_show_upload", False):
+        st.markdown("<br>", unsafe_allow_html=True)
+        st.markdown("""
+        <div style="background:#1E1E1E;border:1px solid #2E2E2E;border-radius:12px;
+                    padding:1.5rem;max-width:600px;margin:0 auto 1rem">
+          <p style="font-family:'Space Grotesk',sans-serif;font-size:.85rem;font-weight:700;
+                    color:#FFF;margin:0 0 .75rem;text-align:center">Upload Your Data File</p>
         </div>""", unsafe_allow_html=True)
+        _setup_uploader()
 
-    st.markdown('<div class="step-label" style="margin-top:1.5rem">STEP 2 — UPLOAD YOUR DATA</div>', unsafe_allow_html=True)
-    new_q = st.text_input("Or type your own question:", value=st.session_state.business_question,
-                          placeholder="e.g., Why are high-value customers churning after month 3?", key="q_input")
-    c1, _ = st.columns([2, 1])
-    with c1:
-        if st.button("Set Business Question", use_container_width=True, key="set_q"):
-            if new_q.strip():
-                st.session_state.business_question = new_q.strip()
-                st.session_state.question_set = True
-                st.rerun()
-    st.markdown('<div class="pro-tip"><span>Pro tip:</span> The more specific your question, the better the analysis.</div>', unsafe_allow_html=True)
 
-    uploaded = st.file_uploader("Upload your data file (CSV or Excel, up to 200MB):", type=["csv","xlsx","xls"], key="file_upload")
+def _setup_uploader():
+    """Shared file uploader — works in both hero and workspace."""
+    uploaded = st.file_uploader("CSV or Excel (up to 200MB)", type=["csv","xlsx","xls"],
+                                key="file_upload", label_visibility="collapsed")
     if uploaded:
         try:
             with st.spinner("Loading and cleaning data..."):
@@ -390,47 +474,95 @@ def tab_setup():
                 st.session_state.filename = uploaded.name; st.session_state.data_loaded = True
                 st.session_state.data_cleaned = True; st.session_state.analysed = False
                 st.session_state.large_dataset = is_large(df)
-                st.session_state.dataset_rows  = len(df)
-                st.session_state.dataset_cols  = len(df.columns)
-            mb = uploaded.size / (1024 * 1024) if hasattr(uploaded, 'size') else 0
+                st.session_state.dataset_rows = len(df); st.session_state.dataset_cols = len(df.columns)
+            mb = uploaded.size / (1024*1024) if hasattr(uploaded, 'size') else 0
             rows_fmt = f"{len(df)/1_000_000:.2f}M" if len(df) >= 1_000_000 else f"{len(df):,}"
             st.success(f"✅ Loaded **{uploaded.name}** — {rows_fmt} rows × {len(df.columns)} columns ({mb:.1f} MB)")
-
-            # Friendly large dataset info box — not alarming
             if is_large(df):
-                st.markdown(f"""
-                <div class="ok-box">
-                  <strong>&#128202; Large dataset ready!</strong> ({rows_fmt} rows)<br>
-                  AnalyticDashAI handles this automatically:<br>
-                  &nbsp;&nbsp;&#10003; AI analysis uses a representative {MAX_SAMPLE_ROWS:,}-row statistical sample<br>
-                  &nbsp;&nbsp;&#10003; Charts render up to {MAX_PLOT_ROWS:,} rows for full visual detail<br>
-                  &nbsp;&nbsp;&#10003; Anomaly detection scans up to {MAX_ANOMALY_ROWS:,} rows<br>
-                  &nbsp;&nbsp;&#10003; All column statistics are computed on the <strong>full dataset</strong><br>
-                  Everything works — just faster and cheaper than processing all {rows_fmt} rows with AI.
-                </div>""", unsafe_allow_html=True)
+                st.info(f"📊 Large dataset — AI uses {MAX_SAMPLE_ROWS:,}-row sample. Charts up to {MAX_PLOT_ROWS:,} rows.")
+            st.rerun()
         except Exception as e: st.error(f"Error reading file: {e}")
 
-    st.markdown("---")
-    st.markdown('<div class="info-card"><h4>No data handy?</h4><p>Try AnalyticDashAI instantly with a built-in sample sales dataset.</p></div>', unsafe_allow_html=True)
-    if st.button("Try with Sample Data", key="sample_btn"):
-        df = get_sample_data()
-        st.session_state.df = df; st.session_state.df_clean = df.copy()
-        st.session_state.filename = "sample_sales_data.csv"; st.session_state.data_loaded = True
-        st.session_state.data_cleaned = True; st.session_state.large_dataset = False
-        st.session_state.dataset_rows = len(df); st.session_state.dataset_cols = len(df.columns)
-        if not st.session_state.business_question:
-            st.session_state.business_question = "What's driving revenue growth this quarter?"
-            st.session_state.question_set = True
-        st.success("Sample data loaded — 300 rows."); st.rerun()
 
-    if st.session_state.df is not None:
-        df = st.session_state.df
-        st.markdown("---"); st.markdown("**Data Preview (first 10 rows):**")
+def _setup_workspace():
+    """Compact workspace shown after data is loaded."""
+    df = st.session_state.df
+
+    # Question picker / display
+    if not st.session_state.business_question:
+        st.markdown("""<p style="font-family:'Space Grotesk',sans-serif;font-size:.72rem;font-weight:700;
+          color:#FF5C00;text-transform:uppercase;letter-spacing:.5px;margin:.5rem 0 .75rem">
+          &#9312; Choose your business question</p>""", unsafe_allow_html=True)
+        cols = st.columns(3)
+        for i, q in enumerate(QUESTION_PROMPTS):
+            with cols[i % 3]:
+                if st.button(q, key=f"q_{i}", use_container_width=True):
+                    st.session_state.business_question = q
+                    st.session_state.question_set = True
+                    st.rerun()
+        new_q = st.text_input("Or type your own:", placeholder="e.g., Why are high-value customers churning?", key="q_input")
+        if st.button("Set Question →", key="set_q"):
+            if new_q.strip():
+                st.session_state.business_question = new_q.strip()
+                st.session_state.question_set = True
+                st.rerun()
+    else:
+        c1, c2 = st.columns([5, 1])
+        with c1:
+            st.markdown(f"""
+            <div style="background:#0C2010;border:1px solid #1A5C2A;border-left:4px solid #4ADE80;
+                        border-radius:8px;padding:.6rem 1rem;margin-bottom:.75rem">
+              <span style="font-size:.7rem;color:#4ADE80;font-weight:700;text-transform:uppercase;letter-spacing:.5px">&#10003; Question Set</span>
+              <p style="margin:.15rem 0 0;color:#FFF;font-size:.9rem;font-weight:500">{st.session_state.business_question}</p>
+            </div>""", unsafe_allow_html=True)
+        with c2:
+            st.markdown("<br>", unsafe_allow_html=True)
+            if st.button("Change", key="change_q"):
+                st.session_state.business_question = ""
+                st.session_state.question_set = False
+                st.rerun()
+
+    # Dataset stats bar
+    rows_fmt = f"{df.shape[0]/1_000_000:.2f}M" if df.shape[0] >= 1_000_000 else f"{df.shape[0]:,}"
+    nc  = len(df.select_dtypes(include=[np.number]).columns)
+    nul = df.isnull().sum().sum()
+    sampling_badge = '<span style="background:#1A1000;border:1px solid #FFBB33;border-radius:999px;padding:.15rem .5rem;font-size:.7rem;color:#FFE0A0">&#128202; Sampling ON</span>' if st.session_state.large_dataset else ""
+    st.markdown(f"""
+    <div style="background:#1E1E1E;border:1px solid #2E2E2E;border-radius:10px;
+                padding:.7rem 1.25rem;display:flex;gap:2rem;flex-wrap:wrap;align-items:center;margin-bottom:.75rem">
+      <div><span style="font-size:.65rem;color:#6B6B6B;text-transform:uppercase;letter-spacing:.5px">File</span>
+           <p style="margin:.1rem 0 0;color:#FFF;font-size:.83rem;font-weight:600">{st.session_state.filename}</p></div>
+      <div><span style="font-size:.65rem;color:#6B6B6B;text-transform:uppercase;letter-spacing:.5px">Rows</span>
+           <p style="margin:.1rem 0 0;color:#FF5C00;font-size:.83rem;font-weight:700">{rows_fmt}</p></div>
+      <div><span style="font-size:.65rem;color:#6B6B6B;text-transform:uppercase;letter-spacing:.5px">Cols</span>
+           <p style="margin:.1rem 0 0;color:#FFF;font-size:.83rem;font-weight:600">{df.shape[1]}</p></div>
+      <div><span style="font-size:.65rem;color:#6B6B6B;text-transform:uppercase;letter-spacing:.5px">Numeric</span>
+           <p style="margin:.1rem 0 0;color:#FFF;font-size:.83rem;font-weight:600">{nc}</p></div>
+      <div><span style="font-size:.65rem;color:#6B6B6B;text-transform:uppercase;letter-spacing:.5px">Missing</span>
+           <p style="margin:.1rem 0 0;color:{"#FF5C00" if nul>0 else "#4ADE80"};font-size:.83rem;font-weight:600">{nul:,}</p></div>
+      <div style="margin-left:auto">{sampling_badge}</div>
+    </div>""", unsafe_allow_html=True)
+
+    with st.expander("Preview data (first 10 rows)", expanded=False):
         st.dataframe(df.head(10), use_container_width=True)
-        m1, m2, m3, m4 = st.columns(4)
-        m1.metric("Rows", f"{df.shape[0]:,}"); m2.metric("Columns", str(df.shape[1]))
-        m3.metric("Numeric cols", str(len(df.select_dtypes(include=[np.number]).columns)))
-        m4.metric("Missing values", f"{df.isnull().sum().sum():,}")
+
+    with st.expander("Upload a different file"):
+        _setup_uploader()
+
+    # Ready CTA
+    if st.session_state.business_question:
+        st.markdown("""
+        <div style="background:linear-gradient(135deg,#1A0E00,#1E1000);border:1px solid #FF5C00;
+                    border-radius:10px;padding:1rem 1.5rem;text-align:center;margin-top:.5rem">
+          <p style="color:#FF5C00;font-family:'Space Grotesk',sans-serif;font-size:.7rem;
+                    font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin:0 0 .3rem">
+            &#9989; Ready to analyse
+          </p>
+          <p style="color:#8B8B8B;font-size:.83rem;margin:0">
+            Go to <strong style="color:#FFF">Tab 2 · Analyse</strong>
+            and click <strong style="color:#FF5C00">Run AI Analyst</strong>
+          </p>
+        </div>""", unsafe_allow_html=True)
 
 # ── Analyse Tab ───────────────────────────────────────────────────────────────
 def tab_analyse():
@@ -444,7 +576,7 @@ def tab_analyse():
 
     if is_large(df):
         rows_fmt = f"{rows/1_000_000:.2f}M" if rows >= 1_000_000 else f"{rows:,}"
-        st.markdown(f'<div class="ok-box">&#128202; <strong>Large dataset mode</strong> ({rows_fmt} rows) — AI uses a {MAX_SAMPLE_ROWS:,}-row sample for prompts. Charts use up to {MAX_PLOT_ROWS:,} rows. Full statistics computed on all data.</div>', unsafe_allow_html=True)
+        st.markdown(f'<div class="ok-box">&#128202; <strong>Large dataset mode</strong> ({rows_fmt} rows) — AI uses a {MAX_SAMPLE_ROWS:,}-row sample. Charts use up to {MAX_PLOT_ROWS:,} rows. Full stats computed on all data.</div>', unsafe_allow_html=True)
 
     if st.button("Run AI Analyst", key="run_analyst"):
         with st.spinner("Running analysis with intelligent model routing..."):
@@ -632,12 +764,12 @@ def tab_dashboard():
                 x2 = cc[1] if len(cc) > 1 else x
                 ctypes = ROLE_CHART_TYPES.get(role, ["bar","line","donut","scatter","histogram","box"])
                 raw_specs = [
-                    {"type":ctypes[0], "x":x,  "y":y,  "title":f"{role}: {y} by {x}"},
-                    {"type":ctypes[1], "x":x,  "y":y,  "title":f"{y} Trend"},
-                    {"type":ctypes[2], "x":x,  "y":y,  "title":f"{y} Mix"},
-                    {"type":ctypes[3], "x":y,  "y":y2, "title":f"{y} vs {y2}"},
-                    {"type":ctypes[4], "x":x2, "y":y,  "title":f"{y} by {x2}"},
-                    {"type":ctypes[5], "x":x,  "y":y,  "title":f"{y} Spread"},]
+                    {"type":ctypes[0],"x":x, "y":y, "title":f"{role}: {y} by {x}"},
+                    {"type":ctypes[1],"x":x, "y":y, "title":f"{y} Trend"},
+                    {"type":ctypes[2],"x":x, "y":y, "title":f"{y} Mix"},
+                    {"type":ctypes[3],"x":y, "y":y2,"title":f"{y} vs {y2}"},
+                    {"type":ctypes[4],"x":x2,"y":y, "title":f"{y} by {x2}"},
+                    {"type":ctypes[5],"x":x, "y":y, "title":f"{y} Spread"},]
                 valid = []
                 for s in raw_specs:
                     sx = s["x"] if s["x"] in df.columns else (cc[0] if cc else df.columns[0])
@@ -646,21 +778,18 @@ def tab_dashboard():
                 st.session_state.dashboard_charts = valid
                 st.rerun()
 
-    active = st.session_state.get("active_role", "")
+    active = st.session_state.get("active_role","")
     if active:
-        st.markdown(f'<div style="background:#0C2010;border:1px solid #1A5C2A;border-left:4px solid #4ADE80;border-radius:8px;padding:.5rem 1rem;margin:.5rem 0;font-size:.85rem;color:#4ADE80">&#10003; <strong>{active}</strong> dashboard active — scroll down to see your charts</div>', unsafe_allow_html=True)
+        st.markdown(f'<div style="background:#0C2010;border:1px solid #1A5C2A;border-left:4px solid #4ADE80;border-radius:8px;padding:.5rem 1rem;margin:.5rem 0;font-size:.85rem;color:#4ADE80">&#10003; <strong>{active}</strong> dashboard active — charts below</div>', unsafe_allow_html=True)
 
-    desc = st.text_area("Or describe a custom dashboard:",
-                        value=st.session_state.get("dashboard_desc", ""),
+    desc = st.text_area("Or describe a custom dashboard:", value=st.session_state.get("dashboard_desc",""),
                         placeholder="e.g., Show revenue by region, monthly trend, and product mix donut chart",
                         height=80, key="dash_desc_input")
     c1, c2 = st.columns([3, 1])
     with c1: gen = st.button("Generate AI Dashboard", key="gen_dash", use_container_width=True)
     with c2:
         if st.button("Clear", key="clear_dash"):
-            st.session_state.dashboard_charts = []
-            st.session_state["active_role"] = ""
-            st.rerun()
+            st.session_state.dashboard_charts = []; st.session_state["active_role"] = ""; st.rerun()
 
     if gen:
         with st.spinner("Building AI-powered dashboard..."):
@@ -676,9 +805,7 @@ Only use these exact column names: {list(df.columns)}"""
                 specs = pjson(raw)
                 if isinstance(specs, list):
                     valid = [s for s in specs if s.get("x") in df.columns and s.get("y","") in df.columns]
-                    st.session_state.dashboard_charts = valid
-                    st.session_state["active_role"] = ""
-                    st.rerun()
+                    st.session_state.dashboard_charts = valid; st.session_state["active_role"] = ""; st.rerun()
             except Exception as e: st.error(f"Dashboard error: {e}")
 
     st.markdown("---")
@@ -688,14 +815,13 @@ Only use these exact column names: {list(df.columns)}"""
         y  = nc[0] if nc else (df.columns[1] if len(df.columns) > 1 else df.columns[0])
         y2 = nc[1] if len(nc) > 1 else y
         st.session_state.dashboard_charts = [
-            {"type":"bar",       "x":x, "y":y,  "title":f"{y} by {x}"},
-            {"type":"line",      "x":x, "y":y,  "title":f"{y} Trend"},
-            {"type":"donut",     "x":x, "y":y,  "title":f"{y} Mix"},
-            {"type":"scatter",   "x":y, "y":y2, "title":f"{y} vs {y2}"},
-            {"type":"histogram", "x":y, "y":y,  "title":f"{y} Distribution"},
-            {"type":"box",       "x":x, "y":y,  "title":f"{y} Spread"}]
-        st.session_state["active_role"] = ""
-        st.rerun()
+            {"type":"bar","x":x,"y":y,"title":f"{y} by {x}"},
+            {"type":"line","x":x,"y":y,"title":f"{y} Trend"},
+            {"type":"donut","x":x,"y":y,"title":f"{y} Mix"},
+            {"type":"scatter","x":y,"y":y2,"title":f"{y} vs {y2}"},
+            {"type":"histogram","x":y,"y":y,"title":f"{y} Distribution"},
+            {"type":"box","x":x,"y":y,"title":f"{y} Spread"}]
+        st.session_state["active_role"] = ""; st.rerun()
 
     if st.session_state.dashboard_charts:
         st.markdown("---"); st.markdown("### Your Dashboard")
@@ -707,32 +833,26 @@ Only use these exact column names: {list(df.columns)}"""
                 sy = spec.get("y", df.columns[1] if len(df.columns) > 1 else df.columns[0])
                 if sx not in df.columns: sx = df.columns[0]
                 if sy not in df.columns: sy = nc[0] if nc else df.columns[0]
-                fig = build_chart(df, spec.get("type","bar"), sx, sy,
-                                  color=spec.get("color"), title=spec.get("title",""), color_idx=i*2+j)
+                fig = build_chart(df, spec.get("type","bar"), sx, sy, color=spec.get("color"), title=spec.get("title",""), color_idx=i*2+j)
                 if fig:
                     with cols[j]: st.plotly_chart(fig, use_container_width=True, key=f"dc_{i}_{j}")
 
         st.markdown("---"); st.markdown("### Export")
         e1, e2, e3 = st.columns(3)
-        with e1:
-            st.download_button("Download CSV", df.to_csv(index=False), "analyticdashai_data.csv", "text/csv", use_container_width=True)
+        with e1: st.download_button("Download CSV", df.to_csv(index=False), "analyticdashai_data.csv", "text/csv", use_container_width=True)
         with e2:
             try:
                 buf = io.BytesIO()
                 with pd.ExcelWriter(buf, engine="xlsxwriter") as w:
                     df.head(100_000).to_excel(w, sheet_name="Data", index=False)
-                    ins = (st.session_state.analysis_result or {}).get("key_insights", [])
+                    ins = (st.session_state.analysis_result or {}).get("key_insights",[])
                     if ins: pd.DataFrame(ins).to_excel(w, sheet_name="Insights", index=False)
                 buf.seek(0)
-                st.download_button("Download Excel", buf.read(), "analyticdashai_report.xlsx",
-                                   "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", use_container_width=True)
-            except Exception as e: st.warning(f"Excel export error: {e}")
+                st.download_button("Download Excel", buf.read(), "analyticdashai_report.xlsx", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", use_container_width=True)
+            except Exception as e: st.warning(f"Excel error: {e}")
         with e3:
-            ed = {"generated":datetime.now().isoformat(),"business_question":question,
-                  "so_what":st.session_state.so_what or {},"anomalies":st.session_state.anomalies,
-                  "recommendations":st.session_state.recommendations or [],
-                  "session_cost_usd":round(st.session_state.session_cost, 4)}
-            st.download_button("Download AI Summary", json.dumps(ed, indent=2), "analyticdashai_summary.json", "application/json", use_container_width=True)
+            ed = {"generated":datetime.now().isoformat(),"business_question":question,"so_what":st.session_state.so_what or {},"anomalies":st.session_state.anomalies,"recommendations":st.session_state.recommendations or [],"session_cost_usd":round(st.session_state.session_cost,4)}
+            st.download_button("Download AI Summary", json.dumps(ed,indent=2), "analyticdashai_summary.json", "application/json", use_container_width=True)
 
 # ── Monitor Tab ───────────────────────────────────────────────────────────────
 def tab_monitor():
@@ -741,14 +861,14 @@ def tab_monitor():
     st.markdown('<div class="step-label">STEP 8 — MONITOR & ITERATE</div>', unsafe_allow_html=True)
     st.markdown("## Monitor & Iterate")
     st.markdown("### &#128176; Session Cost Tracker")
-    mc = st.session_state.model_calls; tot = mc["haiku"] + mc["sonnet"] + mc["opus"]
+    mc = st.session_state.model_calls; tot = mc["haiku"]+mc["sonnet"]+mc["opus"]
     if tot > 0:
-        c1, c2, c3, c4 = st.columns(4)
-        c1.metric("Session Cost", f"${st.session_state.session_cost:.4f}")
-        c2.metric("Total Tokens", f"{st.session_state.session_tokens:,}")
-        c3.metric("Fast calls &#9889;", mc["haiku"],  help="Haiku — simple queries")
-        c4.metric("Deep calls &#128293;", mc["sonnet"]+mc["opus"], help="Sonnet/Opus — complex analysis")
-        saved = (mc["haiku"]*(0.015-0.001)) + (mc["sonnet"]*(0.015-0.004))
+        c1,c2,c3,c4 = st.columns(4)
+        c1.metric("Session Cost",f"${st.session_state.session_cost:.4f}")
+        c2.metric("Total Tokens",f"{st.session_state.session_tokens:,}")
+        c3.metric("Fast calls &#9889;",mc["haiku"],help="Haiku")
+        c4.metric("Deep calls &#128293;",mc["sonnet"]+mc["opus"],help="Sonnet/Opus")
+        saved = (mc["haiku"]*(0.015-0.001))+(mc["sonnet"]*(0.015-0.004))
         if saved > 0.001: st.success(f"&#9889; Smart routing saved ~**${saved:.3f}** vs always using Opus.")
     else:
         st.markdown('<div class="info-card"><h4>No API calls yet</h4><p>Run an analysis to start tracking costs.</p></div>', unsafe_allow_html=True)
@@ -757,9 +877,9 @@ def tab_monitor():
     with st.expander("Add / Edit Monitored KPIs"):
         ncols = list(df.select_dtypes(include=[np.number]).columns)
         if st.button("Auto-detect KPIs", key="auto_kpi"):
-            st.session_state.kpis = {c: {"value":float(df[c].mean()),"label":f"Avg {c}"} for c in ncols[:5]}
+            st.session_state.kpis = {c:{"value":float(df[c].mean()),"label":f"Avg {c}"} for c in ncols[:5]}
             st.success(f"Auto-detected {len(st.session_state.kpis)} KPIs."); st.rerun()
-        m1, m2, m3 = st.columns([2, 3, 1])
+        m1,m2,m3 = st.columns([2,3,1])
         with m1: kl = st.text_input("KPI Label", placeholder="e.g., Avg Revenue", key="kpi_label")
         with m2: kc = st.text_input("Python code", placeholder="result = df['Revenue'].mean()", key="kpi_code")
         with m3:
@@ -767,28 +887,24 @@ def tab_monitor():
             if st.button("Add KPI", key="add_kpi"):
                 if kl and kc:
                     try:
-                        lv = {"df":df,"pd":pd,"np":np}; exec(kc, {}, lv); val = lv.get("result")
+                        lv={"df":df,"pd":pd,"np":np}; exec(kc,{},lv); val=lv.get("result")
                         if val is not None:
-                            st.session_state.kpis[kl] = {"value":float(val),"label":kl}
+                            st.session_state.kpis[kl]={"value":float(val),"label":kl}
                             st.success(f"KPI '{kl}' = {val:.2f}"); st.rerun()
                     except Exception as e: st.error(f"KPI error: {e}")
     if st.session_state.kpis:
         st.markdown("### Current KPIs")
-        items = list(st.session_state.kpis.items()); kc = st.columns(min(len(items), 4))
-        for i, (n, d) in enumerate(items[:4]):
+        items = list(st.session_state.kpis.items()); kc = st.columns(min(len(items),4))
+        for i,(n,d) in enumerate(items[:4]):
             with kc[i]: st.metric(n, f"{d.get('value',0):,.2f}")
 
     st.markdown("---"); st.markdown("### &#128248; Snapshots")
-    s1, s2 = st.columns([3, 2])
+    s1,s2 = st.columns([3,2])
     with s1: sl = st.text_input("Snapshot label:", placeholder="e.g., After Q2 cleaning", key="snap_label")
     with s2:
         st.markdown("<br>", unsafe_allow_html=True)
         if st.button("Take Snapshot", key="snap_btn"):
-            st.session_state.snapshots.append({
-                "label": sl or f"Snapshot {len(st.session_state.snapshots)+1}",
-                "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M"),
-                "rows": len(df), "kpis": dict(st.session_state.kpis),
-                "anomalies": list(st.session_state.anomalies)})
+            st.session_state.snapshots.append({"label":sl or f"Snapshot {len(st.session_state.snapshots)+1}","timestamp":datetime.now().strftime("%Y-%m-%d %H:%M"),"rows":len(df),"kpis":dict(st.session_state.kpis),"anomalies":list(st.session_state.anomalies)})
             st.success("Snapshot saved."); st.rerun()
     if st.session_state.snapshots:
         for snap in reversed(st.session_state.snapshots):
